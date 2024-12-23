@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		     xmlns:models="using:FinanceManager.ViewModels"
+		     xmlns:views="using:FinanceManager.Views"
+			 xmlns:pgc="using:Avalonia.PropertyGrid.Controls"
+			 xmlns:controls="using:Avalonia.Controls"
+             x:Class="FinanceManager.Views.SettingView"
+			 DataContextChanged="UserControl_DataContextChanged"
+		     x:DataType="models:MainModel">
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+               to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<models:SettingModel />
+	</Design.DataContext>
+	<Grid RowDefinitions="*, 5, auto">
+		<pgc:PropertyGrid x:Name="pgSettings"
+						  DataContext="{Binding Settings}"
+						  ShowTitle="False"
+						  ShowStyle="Tiled"
+						  AllowFilter="False"
+						  AllowQuickFilter="False"
+						  Grid.Row="0">
+
+		</pgc:PropertyGrid>
+		<Separator Grid.Row="1"/>
+		<StackPanel HorizontalAlignment="Right" Grid.Row="2">
+			<Button x:Name="btnExport"
+					Content="Export" 
+					Width="150"
+					HorizontalContentAlignment="Center"
+					Margin="2"
+					Click="btnExport_Click"/>
+		</StackPanel>
+	</Grid>
+</UserControl>
