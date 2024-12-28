@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FinanceManager.ViewModels
 {
-    internal class SettingModel : PropertyModels.ComponentModel.ReactiveObject
+    public class SettingModel : PropertyModels.ComponentModel.ReactiveObject
     {
         [PathBrowsable(pathSelection: PathBrowsableType.Directory, Title = "Select the working directory")]
         [DisplayName("Working Directory")]

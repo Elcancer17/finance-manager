@@ -14,5 +14,16 @@
                to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
 		<models:MainModel />
 	</Design.DataContext>
-
+	<DataGrid x:Name="dgFinancialData"
+			  ItemsSource="{Binding FinancialData}"
+			  GridLinesVisibility="All"
+			  VerticalAlignment="Stretch">
+		<DataGrid.Columns>
+			<DataGridTextColumn Header="TimeStamp" Binding="{Binding TimeStamp}" IsReadOnly="True"/>
+			<DataGridTextColumn Header="Desjardins" Width="*" Binding="{Binding Desjardins.Value}" IsReadOnly="True"/>
+			<DataGridCheckBoxColumn Header="Is Validated" Binding="{Binding Desjardins.IsValidated}"/>
+			<DataGridTextColumn Header="Scocia" Width="*" Binding="{Binding Scocia.Value}" IsReadOnly="True"/>
+			<DataGridCheckBoxColumn Header="Is Validated" Binding="{Binding Scocia.IsValidated}"/>
+		</DataGrid.Columns>
+	</DataGrid>
 </UserControl>
