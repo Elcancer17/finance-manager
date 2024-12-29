@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 DataContextChanged="UserControl_DataContextChanged"
+             x:Class="FinanceManager.Logging.LogConsole">
+	<Grid>
+		<ScrollViewer x:Name="svLogs"
+					  VerticalScrollBarVisibility="Visible">
+			<SelectableTextBlock x:Name="stbLogs"
+								 Padding="2"
+								 FontFamily="Consolas"
+								 HorizontalAlignment="Stretch"
+								 VerticalAlignment="Stretch"
+								 TextWrapping="Wrap"
+								 Background="WhiteSmoke"/>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

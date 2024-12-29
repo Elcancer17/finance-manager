@@ -21,5 +21,8 @@
 		<TabItem Header="Finance">
 			<views:FinanceView/>
 		</TabItem>
+		<TabItem Header="Console">
+			<views:LogConsoleView/>
+		</TabItem>
 	</TabControl>
 </Window>
