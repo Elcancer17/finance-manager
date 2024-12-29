@@ -10,8 +10,6 @@ namespace FinanceManager.ViewModels
     public class FinancialDisplayLine
     {
         public DateTime TimeStamp { get; set; }
-        public FinancialTransaction Desjardins { get; set; }
-        public FinancialTransaction Scocia { get; set; }
-
+        public List<FinancialTransaction> Accounts { get; set; }
     }
 }

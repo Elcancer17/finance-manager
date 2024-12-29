@@ -8,6 +8,7 @@
 			 xmlns:pgc="using:Avalonia.PropertyGrid.Controls"
 			 xmlns:controls="using:Avalonia.Controls"
              x:Class="FinanceManager.Views.FinanceView"
+			 DataContextChanged="UserControl_DataContextChanged"
 			 x:DataType="models:MainModel">
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -20,10 +21,6 @@
 			  VerticalAlignment="Stretch">
 		<DataGrid.Columns>
 			<DataGridTextColumn Header="TimeStamp" Binding="{Binding TimeStamp}" IsReadOnly="True"/>
-			<DataGridTextColumn Header="Desjardins" Width="*" Binding="{Binding Desjardins.Value}" IsReadOnly="True"/>
-			<DataGridCheckBoxColumn Header="Is Validated" Binding="{Binding Desjardins.IsValidated}"/>
-			<DataGridTextColumn Header="Scocia" Width="*" Binding="{Binding Scocia.Value}" IsReadOnly="True"/>
-			<DataGridCheckBoxColumn Header="Is Validated" Binding="{Binding Scocia.IsValidated}"/>
 		</DataGrid.Columns>
 	</DataGrid>
 </UserControl>

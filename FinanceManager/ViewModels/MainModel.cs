@@ -17,14 +17,24 @@ namespace FinanceManager.ViewModels
         public SettingModel Settings { get; set; } = new();
         public ObservableCollection<FinancialDisplayLine> FinancialData { get; } = new();
 
-        private FinancialTransaction GenerateDummyTransaction(DateTime date, Random random)
+        private List<FinancialTransaction> GenerateDummyAccounts(DateTime date, Random random)
         {
-            return new FinancialTransaction()
+            string[] DUMMY_FINANCIAL_INSTITUTIONS = ["Desjardins", "Scocia", "test1", "test2"];
+
+            List<FinancialTransaction> financialTransactions = new();
+            for(int i = 0; i < DUMMY_FINANCIAL_INSTITUTIONS.Length; i++)
             {
-                TimeStamp = date,
-                Value = (decimal)Math.Round(random.NextDouble() * 1000, 2)
-            };
+                financialTransactions.Add(new FinancialTransaction()
+                {
+                    TimeStamp = date,
+                    FinancialInstitution = DUMMY_FINANCIAL_INSTITUTIONS[i],
+                    Value = (decimal)Math.Round(random.NextDouble() * 1000, 2)
+                });
+            }
+
+            return financialTransactions;
         }
+
         private bool HeadsOrTail(Random random)
         {
             if (random.Next(0,1) == 0) 
@@ -47,8 +57,7 @@ namespace FinanceManager.ViewModels
                     FinancialData.Add(new FinancialDisplayLine()
                     {
                         TimeStamp = date,
-                        Desjardins = GenerateDummyTransaction(date, random),
-                        Scocia = GenerateDummyTransaction(date, random),
+                        Accounts = GenerateDummyAccounts(date, random)
                     });
                     if (HeadsOrTail(random))
                     {
