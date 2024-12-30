@@ -20,7 +20,7 @@
 			  GridLinesVisibility="All"
 			  VerticalAlignment="Stretch">
 		<DataGrid.Columns>
-			<DataGridTextColumn Header="TimeStamp" Binding="{Binding TimeStamp}" IsReadOnly="True"/>
+			<DataGridTextColumn Header="TimeStamp" Binding="{Binding TimeStamp, StringFormat='yyyy-MM-dd'}" IsReadOnly="True"/>
 		</DataGrid.Columns>
 	</DataGrid>
 </UserControl>
