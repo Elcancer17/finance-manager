@@ -4,6 +4,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.PropertyGrid.Controls;
 using FinanceManager.Domain;
 using FinanceManager.Utils;
@@ -43,11 +44,12 @@ public partial class FinanceView : UserControl
         }
         for (int i = 0; i < financialInstitutions.Count; i++)
         {
-            DataGridTextColumn valueColumn = new() 
+            DataGridColoredTextColumn<decimal> valueColumn = new() 
             {
                 Header = financialInstitutions[i],
                 Width = DataGridLength.Auto,
                 Binding = new Binding($"{nameof(FinancialDisplayLine.Accounts)}[{i}].{nameof(FinancialTransaction.Value)}"),
+                ColorFunc = SelectColor,
                 IsReadOnly = true,
             };
             dgFinancialData.Columns.Add(valueColumn);
@@ -57,6 +59,18 @@ public partial class FinanceView : UserControl
                 Binding = new Binding($"{nameof(FinancialDisplayLine.Accounts)}[{i}].{nameof(FinancialTransaction.IsValidated)}")
             };
             dgFinancialData.Columns.Add(isValidatedColumn);
+        }
+    }
+
+    private IBrush SelectColor(decimal value)
+    {
+        if (value >= 0)
+        {
+            return Brushes.LightGreen;
+        }
+        else
+        {
+            return Brushes.OrangeRed;
         }
     }
 

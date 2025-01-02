@@ -24,11 +24,12 @@ namespace FinanceManager.ViewModels
             List<FinancialTransaction> financialTransactions = new();
             for(int i = 0; i < DUMMY_FINANCIAL_INSTITUTIONS.Length; i++)
             {
+                decimal value = (decimal)Math.Round(random.NextDouble() * 1000 * random.Next(-1, 2), 2);
                 financialTransactions.Add(new FinancialTransaction()
                 {
                     TimeStamp = date,
                     FinancialInstitution = DUMMY_FINANCIAL_INSTITUTIONS[i],
-                    Value = (decimal)Math.Round(random.NextDouble() * 1000, 2)
+                    Value = value
                 });
             }
 
@@ -40,7 +41,7 @@ namespace FinanceManager.ViewModels
             if (random.Next(0,1) == 0) 
                 return true;
             else
-                return true;
+                return false;
         }
         private void CreateDummyData()
         {
