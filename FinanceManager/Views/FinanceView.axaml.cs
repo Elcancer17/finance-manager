@@ -7,10 +7,12 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.PropertyGrid.Controls;
 using FinanceManager.Domain;
+using FinanceManager.Logging;
 using FinanceManager.Utils;
 using FinanceManager.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace FinanceManager.Views;
@@ -82,5 +84,10 @@ public partial class FinanceView : UserControl
             return;
         }
         //do something here
+        for (int i = 0; i < files.Count; i++)
+        {
+            Trace.WriteLine(files[i], LogLevel.Information.ToString());
+            //logConsole.LogMessage(files[i]);
+        }
     }
 }

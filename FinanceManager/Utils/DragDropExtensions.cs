@@ -1,11 +1,16 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using FinanceManager.Import;
+using FinanceManager.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static FinanceManager.Import.FileManager;
+using static FinanceManager.Import.QuickenManager;
 
 namespace FinanceManager.Utils
 {
@@ -28,6 +33,21 @@ namespace FinanceManager.Utils
         private static void DefaultDragOverHandler(object sender, DragEventArgs e)
         {
             e.DragEffects = DragDropEffects.Move;
+        }
+       
+        public static void Drop(object sender, DragEventArgs e)
+        {
+            List<string> files = e.Data.GetFiles()?.Select(x => x.Path.LocalPath).ToList();
+            if (files == null)//null whenever you didnt drop a file
+            {
+                return;
+            }
+            //do something here
+            for (int i = 0; i < files.Count; i++)
+            {
+                ImportManager im = new ImportManager(files[i]);
+                im.ImporFile();
+            }
         }
     }
 }

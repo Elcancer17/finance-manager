@@ -1,9 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using FinanceManager.Logging;
-using System.Diagnostics;
+using FinanceManager.Utils;
 
 namespace FinanceManager.Views;
 
@@ -12,10 +9,11 @@ public partial class LogConsoleView : UserControl
     public LogConsoleView()
     {
         InitializeComponent();
+        lcLogs.AddDragDropHandler(DragDropExtensions.Drop);
     }
 
     private void btnClear_Click(object sender, RoutedEventArgs e)
     {
         lcLogs.ClearLogs();
-    }
+    }     
 }

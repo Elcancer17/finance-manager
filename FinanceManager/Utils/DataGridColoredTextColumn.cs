@@ -35,7 +35,8 @@ namespace FinanceManager.Utils
             Grid grid = new()
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Margin = new Avalonia.Thickness(0, 0, 2, 0)
             };
             TextBlock textBlock = new TextBlock()
             { 
@@ -58,7 +59,7 @@ namespace FinanceManager.Utils
             //style.Add(setter);
             //cell.Styles.Add(style);
 
-            grid.Bind(TextBlock.BackgroundProperty, colorBinding);
+            grid.Bind(TextBlock.ForegroundProperty, colorBinding);
             return grid;
         }
     }

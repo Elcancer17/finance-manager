@@ -1,17 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace FinanceManager.Domain
 {
     public class FinancialTransaction
     {
-        public DateTime TimeStamp { get; set; }
+        public string QuickenId { get; set; }
+
         public string FinancialInstitution { get; set; }
+
+        public int AccountNumber { get; set; }
+
+        public string TransactionType { get; set; }
+
+        public string Description { get; set; }
+
+        public DateTime TimeStamp { get; set; }
+
         public decimal Value { get; set; }
+
         public bool IsValidated { get; set; }
+
+        public string TransactionId { get; set; }
+
+        public void SetTransactionId()
+        {
+            TransactionId = string.Format("{0}{1}{2}{3}{4}",
+                                          FinancialInstitution,
+                                          AccountNumber,
+                                          TransactionType,
+                                          TimeStamp.ToString(),
+                                          Value.ToString());
+            TransactionId = SHA256ToString(TransactionId);
+        }
+        public static string SHA256ToString(string s)
+        {
+            using (var alg = SHA256.Create())
+                return alg.ComputeHash(Encoding.UTF8.GetBytes(s)).Aggregate(new StringBuilder(), (sb, x) => sb.Append(x.ToString("x2"))).ToString();
+        }
     }
 }
