@@ -1,6 +1,5 @@
-﻿using System.IO;
-using FinanceManager.Domain;
-using static FinanceManager.Domain.FileDefinition;
+﻿using FinanceManager.Domain;
+using System.IO;
 
 namespace FinanceManager.Import
 {
@@ -9,7 +8,7 @@ namespace FinanceManager.Import
     {
         public FileInfo fileProps { get; }
 
-        public Definition definition { get; }
+        public FileDefinition definition { get; }
 
         public FinancialTransactionManager ftm { get; set; }
 
@@ -17,7 +16,7 @@ namespace FinanceManager.Import
         {
             ftm = new FinancialTransactionManager();
             fileProps = new FileInfo(filename);
-            definition = new FileDefinition().GetFileDefinition(fileProps.GetFinancialInstitutionType(), fileProps.Extension);
+            definition = new FileDefinitionManager().GetFileDefinition(fileProps.GetFinancialInstitutionType());
             LoadFile(filename);
             Validate();
         }

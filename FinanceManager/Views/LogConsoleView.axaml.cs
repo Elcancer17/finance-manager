@@ -15,5 +15,9 @@ public partial class LogConsoleView : UserControl
     private void btnClear_Click(object sender, RoutedEventArgs e)
     {
         lcLogs.ClearLogs();
-    }     
+    }
+
+    public void ClearLogs() {
+        lcLogs.ClearLogs();
+    }
 }

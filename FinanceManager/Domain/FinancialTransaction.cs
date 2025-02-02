@@ -11,7 +11,7 @@ namespace FinanceManager.Domain
 
         public string FinancialInstitution { get; set; }
 
-        public int AccountNumber { get; set; }
+        public long AccountNumber { get; set; }
 
         public string TransactionType { get; set; }
 
@@ -30,8 +30,8 @@ namespace FinanceManager.Domain
             TransactionId = string.Format("{0}{1}{2}{3}{4}",
                                           FinancialInstitution,
                                           AccountNumber,
-                                          TransactionType,
-                                          TimeStamp.ToString(),
+                                          TransactionType.Replace("0",""),
+                                          TimeStamp.Date.ToString().Substring(0,10),
                                           Value.ToString());
             TransactionId = SHA256ToString(TransactionId);
         }

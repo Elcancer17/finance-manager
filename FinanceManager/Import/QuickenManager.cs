@@ -85,7 +85,7 @@ namespace FinanceManager.Import
                     foreach (STMTTRN itemL1 in ofx.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN)
                     {
                         FinancialTransaction ft = itemL1.MapSTMTTRNToFinancialTransaction(fileProps.GetFinancialInstitutionType(), 
-                                                                                          ofx.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.CCACCTFROM.ACCTID.ToInt());
+                                                                                          ofx.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.CCACCTFROM.ACCTID);
 
                         if (result.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
                         {
@@ -111,7 +111,7 @@ namespace FinanceManager.Import
                                     foreach (STMTTRN iteml3 in iteml2.BANKTRANLIST.STMTTRN)
                                     {
                                         FinancialTransaction ft = iteml3.MapSTMTTRNToFinancialTransaction(fileProps.GetFinancialInstitutionType(), 
-                                                                                                          iteml2.BANKACCTFROM.BRANCHID.ToInt());
+                                                                                                          iteml2.BANKACCTFROM.BRANCHID);
 
                                         if (result.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
                                         {

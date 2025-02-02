@@ -14,6 +14,7 @@ namespace FinanceManager.Import.Extension
             //"","2024-08-15","AUBAINES YVES CROTEAU","Levis Qc","Inscrites","Débit","295.49"
             Csv item = new Csv();
             item.Filtre = row.ItemArray[0].ToString();
+            item.Compte = "4538261968031105"; // "4538261968031014";
             item.TransactionDate = row.ItemArray[1].ToString();
             item.Description = row.ItemArray[2].ToString();
             item.SubDescription = row.ItemArray[3].ToString();
@@ -45,7 +46,8 @@ namespace FinanceManager.Import.Extension
                 item.Amount = "-" + row.ItemArray[3].ToString();
                 item.TransactionType = "CREDIT";
             }
-            item.CC = row.ItemArray[4].ToString();
+            item.Compte = row.ItemArray[4].ToString();
+            item.Compte = "5223030005809154";
             return item;
         }
 

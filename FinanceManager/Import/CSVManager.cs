@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using static FinanceManager.Domain.FileDefinition;
 
 namespace FinanceManager.Import
 {
@@ -44,12 +43,12 @@ namespace FinanceManager.Import
                     if (string.IsNullOrEmpty(firstLine))
                     {
                         throw new Exception(string.Format("Error {0}: The header should not be empty",
-                                                          VISA_INFINITE_MOMENTUM_SCOTIA));
+                                                          FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA));
                     }
                     if (!(firstLine == definition.FirstLineFr || firstLine == definition.FirstLineEn))
                     {
                         throw new Exception(string.Format("Error {0}: Header is not the good one for CSV file",
-                                                          VISA_INFINITE_MOMENTUM_SCOTIA));
+                                                          FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA));
                     }
                 }
                 else
@@ -61,7 +60,7 @@ namespace FinanceManager.Import
             if (firstLine.Split(",").Count() != definition.ColumnsCount)
             {
                 throw new Exception(string.Format("{0}: Bad columns count {1} for CSV file, expected {2}",
-                                                  VISA_INFINITE_MOMENTUM_SCOTIA,
+                                                  FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA,
                                                   0,
                                                   definition.ColumnsCount));
             }
@@ -94,22 +93,22 @@ namespace FinanceManager.Import
                 lines[i] = lines[i].Replace("\r", "").Replace("\"", "").Replace(", ", " ");
                 switch (fileProps.GetFinancialInstitutionType())
                 {
-                    case VISA_INFINITE_MOMENTUM_SCOTIA:
+                    case FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA:
                         if (lines[i] != string.Empty && i > 0)
                         {
-                            result.Add(lines[i].MapVisaInfiniteMomentumScotiaLineToVcs());
+                            result.Add(lines[i].MapVisaInfiniteMomentumScotiaLineToCsv());
                         }
                         break;
-                    case CIBC:
+                    case FileDefinitionManager.CIBC:
                         if (lines[i] != string.Empty)
                         {
-                            result.Add(lines[i].MapCibcLineToVcs());
+                            result.Add(lines[i].MapCibcLineToCsv());
                         }
                         break;
-                    case DESJARDINS:
+                    case FileDefinitionManager.DESJARDINS:
                         if (lines[i] != string.Empty)
                         {
-                            result.Add(lines[i].MapDesjardinsLineToVcs());
+                            result.Add(lines[i].MapDesjardinsLineToCsv());
                         }
                         break;
                     default:

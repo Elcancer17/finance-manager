@@ -18,6 +18,8 @@ public partial class LogConsole : UserControl
     private DateTime initialTime = DateTime.Now;
     private Stopwatch stopwatch = Stopwatch.StartNew();
     private LogConsoleTraceListener traceListener;
+    public bool ClearConsoleAutomaticaly { get; set; } = false;
+
     public LogConsole()
     {
         InitializeComponent();
@@ -63,7 +65,7 @@ public partial class LogConsole : UserControl
         DateTime currentTime = CalculateCurrentTime();
         Dispatcher.UIThread.InvokeAsync(() =>
         {
-            if (stbLogs.Inlines.Count > MAX_LINE_COUNT)
+            if (ClearConsoleAutomaticaly && stbLogs.Inlines.Count > MAX_LINE_COUNT)
             {
                 stbLogs.Inlines.Clear();
             }
@@ -73,7 +75,7 @@ public partial class LogConsole : UserControl
                 new LineBreak()
             ]);
         }, DispatcherPriority.Normal);
-        svLogs.ScrollToEnd();
+        //svLogs.ScrollToEnd();
     }
 
     public void ClearLogs()

@@ -145,6 +145,23 @@ namespace FinanceManager.Import.Extension
             return 0;
         }
 
+        public static long ToLong(this string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                if (long.TryParse(value, out long j))
+                {
+                    return j;
+                }
+                else
+                {
+                    throw new Exception(string.Format("String {0} could not be parsed to Long.",
+                                                      value));
+                }
+            }
+            return 0;
+        }
+
         public static string AdjustQuickenXml(this string value)
         {
             value = value.CleanQuickenXmlStartLines();
@@ -215,8 +232,10 @@ namespace FinanceManager.Import.Extension
             }
             return value;
         }
-        public static Csv MapVisaInfiniteMomentumScotiaLineToVcs(this string line)
+        public static Csv MapVisaInfiniteMomentumScotiaLineToCsv(this string line)
         {
+            FileDefinitionManager fdm = new FileDefinitionManager();
+            FileDefinition fd = fdm.GetFileDefinition(FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA);
             //Sample:
             // Filtre,Date,Description,Sous-description,État,Type d’opération,Montant
             // "Période de relevé en cours","2024-09-19","VIRGIN PLUS",,"En attente","Débit","104.68"
@@ -225,68 +244,76 @@ namespace FinanceManager.Import.Extension
             line = line.Replace("\r", "").Replace("\"", "");
             List<string> cols = line.Split(",").ToList();
             Csv item = new Csv();
-            item.Filtre = cols[0];
-            item.TransactionDate = cols[1];
-            item.Description = cols[2];
-            item.SubDescription = cols[3];
-            item.Etat = cols[4];
-            item.TransactionType = cols[5];
-            item.Amount = cols[6];
+            item.Filtre = cols[fd.ColumnIndexForFiltre.ToInt()];
+            item.Compte = "4538261968031105"; // "4538261968031014";
+            item.TransactionDate = cols[fd.ColumnIndexForTransactionDate.ToInt()];
+            item.Description = cols[fd.ColumnIndexForDescription.ToInt()];
+            item.SubDescription = cols[fd.ColumnIndexForSubDescription.ToInt()];  
+            item.Etat = cols[fd.ColumnIndexForEtat.ToInt()];
+            item.TransactionType = cols[fd.ColumnIndexForTransactionType.ToInt()];
+            item.Amount = cols[fd.ColumnIndexForAmountCredit.ToInt()];
             if ((item.TransactionType == "Crédit" || item.TransactionType == "Credit") &&
-                !cols[6].Contains("-"))
+                !cols[fd.ColumnIndexForAmountCredit.ToInt()].Contains("-"))
             {
-                item.Amount = "-" + cols[6];
+                item.Amount = "-" + cols[fd.ColumnIndexForAmountCredit.ToInt()];
             }
             return item;
         }
 
-        public static Csv MapCibcLineToVcs(this string line)
+        public static Csv MapCibcLineToCsv(this string line)
         {
+            FileDefinitionManager fdm = new FileDefinitionManager();
+            FileDefinition fd = fdm.GetFileDefinition(FileDefinitionManager.CIBC);
             // Sample: 
             //2024-12-27,"RESTAURANT NORMANDIN LEVIS, QC",59.11,,5223********9154
             line = line.Replace("\r", "").Replace("\"", "");
             List<string> cols = line.Split(",").ToList();
             Csv item = new Csv();
-            item.TransactionDate = cols[0];
-            item.Description = cols[1];
-            if (cols[2] != string.Empty)
+            item.TransactionDate = cols[fd.ColumnIndexForTransactionDate.ToInt()];
+            item.Description = cols[fd.ColumnIndexForDescription.ToInt()];
+            if (cols[fd.ColumnIndexForAmountDebit.ToInt()] != string.Empty)
             {
-                item.Amount = cols[2];
+                item.Amount = "-" + cols[fd.ColumnIndexForAmountDebit.ToInt()];
+                item.TransactionType = "DEBIT";
             }
-            else if (cols[3] != string.Empty)
+            else if (cols[fd.ColumnIndexForAmountCredit.ToInt()] != string.Empty)
             {
-                item.Amount = "-" + cols[3];
+                item.Amount = cols[fd.ColumnIndexForAmountCredit.ToInt()];
+                item.TransactionType = "CREDIT";
             }
-            item.CC = cols[4];
+            item.Compte = cols[fd.ColumnIndexForCompte.ToInt()];
+            item.Compte = "5223030005809154";
             return item;
         }
 
-        public static Csv MapDesjardinsLineToVcs(this string line)
+        public static Csv MapDesjardinsLineToCsv(this string line)
         {
+            FileDefinitionManager fdm = new FileDefinitionManager();
+            FileDefinition fd = fdm.GetFileDefinition(FileDefinitionManager.DESJARDINS);
             //Sample: 
             //"Chaudière ","024270","EOP","2024/11/28",00001,"Paiement facture - AccèsD Internet /Immatriculations - Permis","",35.40,"","","","","",3874.40
             //"Chaudière ","024270","EOP","2024/11/29",00004,"Virement entre folios /de 024373 EOP","","",1800.00,"","","","",5819.83
             line = line.Replace("\r", "").Replace("\"", "");
             List<string> cols = line.Split(",").ToList();
             Csv item = new Csv();
-            item.Filtre = cols[0];
-            item.Compte = cols[1];
-            item.CompteType = cols[2];
-            item.TransactionDate = cols[3];
-            item.NoSeq = cols[4];
-            item.Description = cols[5];
-            item.Amount = cols[7];
-            if (cols[7] != string.Empty)
+            item.Filtre = cols[fd.ColumnIndexForFiltre.ToInt()];
+            item.Compte = cols[fd.ColumnIndexForCompte.ToInt()];
+            item.CompteType = cols[fd.ColumnIndexForCompteType.ToInt()];
+            item.TransactionDate = cols[fd.ColumnIndexForTransactionDate.ToInt()];
+            item.NoSeq = cols[fd.ColumnIndexForNoSeq.ToInt()];
+            item.Description = cols[fd.ColumnIndexForDescription.ToInt()];
+            item.Amount = cols[fd.ColumnIndexForAmountDebit.ToInt()];
+            if (cols[fd.ColumnIndexForAmountDebit.ToInt()] != string.Empty)
             {
-                item.Amount = "-" + cols[7];
+                item.Amount = "-" + cols[fd.ColumnIndexForAmountDebit.ToInt()];
                 item.TransactionType = "DEBIT";
             }
-            else if (cols[8] != string.Empty)
+            else if (cols[fd.ColumnIndexForAmountCredit.ToInt()] != string.Empty)
             {
-                item.Amount = cols[8];
+                item.Amount = cols[fd.ColumnIndexForAmountCredit.ToInt()];
                 item.TransactionType = "CREDIT";
             }
-            item.Total = cols[13];
+            item.Total = cols[fd.ColumnIndexForTotal.ToInt()];
             return item;
         }
     }

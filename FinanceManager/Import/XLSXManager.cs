@@ -8,7 +8,6 @@ using System.Data;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.Linq;
-using static FinanceManager.Domain.FileDefinition;
 
 namespace FinanceManager.Import
 {
@@ -58,13 +57,13 @@ namespace FinanceManager.Import
                     if (string.IsNullOrEmpty(headers))
                     {
                         throw new Exception(string.Format("Error {0}: The header should not be empty for {1} file",
-                                                          VISA_INFINITE_MOMENTUM_SCOTIA,
+                                                          FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA,
                                                           fileProps.GetExtention()));
                     }
                     if (!(headers == definition.FirstLineFr || headers == definition.FirstLineEn))
                     {
                         throw new Exception(string.Format("Error {0}: Header is not the good one for {1} file",
-                                                          VISA_INFINITE_MOMENTUM_SCOTIA,
+                                                          FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA,
                                                           fileProps.GetExtention()));
                     }
                 }
@@ -73,7 +72,7 @@ namespace FinanceManager.Import
             if (fileContent.GetColumnsCount() != definition.ColumnsCount)
             {
                 throw new Exception(string.Format("{0}: Bad columns count {1} for {2} file, expected {3}",
-                                                  VISA_INFINITE_MOMENTUM_SCOTIA,
+                                                  FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA,
                                                   fileContent.GetColumnsCount(),
                                                   fileProps.GetExtention(),
                                                   definition.ColumnsCount));
@@ -101,13 +100,13 @@ namespace FinanceManager.Import
             {
                 switch (fileProps.GetFinancialInstitutionType())
                 {
-                    case VISA_INFINITE_MOMENTUM_SCOTIA:
+                    case FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA:
                         result.Add(fileContent.Rows[i].MapVisaInfiniteMomentumScotiaRowToCsv());
                         break;
-                    case CIBC:
+                    case FileDefinitionManager.CIBC:
                         result.Add(fileContent.Rows[i].MapCibcRowToCsv());
                         break;
-                    case DESJARDINS:
+                    case FileDefinitionManager.DESJARDINS:
                         result.Add(fileContent.Rows[i].MapDesjardinsRowToCsv());
                         break;
                     default:

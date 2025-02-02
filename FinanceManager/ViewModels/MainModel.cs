@@ -1,11 +1,15 @@
 ﻿using FinanceManager.Domain;
 using FinanceManager.Import;
+using FinanceManager.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tmds.DBus.Protocol;
+using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FinanceManager.ViewModels
@@ -14,8 +18,11 @@ namespace FinanceManager.ViewModels
     {
         public MainModel()
         {
-            //CreateDummyData();
             LoadData();
+            if (FinancialData.Count() == 0)
+            {
+                CreateDummyData();
+            }
         }
         public SettingModel Settings { get; set; } = new();
         public ObservableCollection<FinancialDisplayLine> FinancialData { get; } = new();
@@ -73,15 +80,55 @@ namespace FinanceManager.ViewModels
         private void LoadData()
         {
             FinancialTransactionManager ftm = new FinancialTransactionManager();
-            List<FinancialTransaction> listeFT = ftm.Load();
-            for (int i = 0; i < listeFT.Count(); i++)
+            List<FinancialTransaction> listeFTM = ftm.Load();
+
+            if (listeFTM.Count() > 0)
             {
-                FinancialData.Add(new FinancialDisplayLine()
+                List<IGrouping<long, FinancialTransaction>> listGroup = listeFTM.GroupBy(p => p.AccountNumber).ToList();
+                IGrouping<long, FinancialTransaction> item = listGroup[0];
+                listeFTM = item.ToList();
+                //listeFTM = listeFTM.OrderByDescending(p => p.TimeStamp).ThenByDescending(s => s.TimeStamp).ToList();
+                listeFTM = listeFTM.OrderByDescending(p => p.TimeStamp).ThenBy(s => s.TimeStamp).ToList();
+
+                for (int i = 0; i < listeFTM.Count(); i++)
                 {
-                    TimeStamp = listeFT[i].TimeStamp,
-                    Accounts = new List<FinancialTransaction>() { listeFT[i] }
-                });
+                    FinancialData.Add(new FinancialDisplayLine()
+                    {
+                        TimeStamp = listeFTM[i].TimeStamp,
+                        Accounts = new List<FinancialTransaction>() { listeFTM[i] }
+                    });
+                }
             }
         }
+
+        public static void LogTransactions()
+        {
+            FinancialTransactionManager ftm = new FinancialTransactionManager();
+            List<FinancialTransaction> listeFTM = ftm.Load();
+
+            List<IGrouping<long, FinancialTransaction>> listGroup = listeFTM.GroupBy(p => p.AccountNumber).ToList();
+            //IGrouping<long, FinancialTransaction> item = listGroup[6];
+            //listeFTM = item.ToList();
+            //listeFTM = listeFTM.OrderByDescending(p => p.TimeStamp).ThenByDescending(s => s.TimeStamp).ToList();
+            //listeFTM = listeFTM.OrderByDescending(p => p.TimeStamp).ThenBy(s => s.TimeStamp).ToList();
+
+            for (int i = 0; i < listGroup.Count(); i++)
+            {
+                IGrouping<long, FinancialTransaction> item = listGroup[i];
+                List<FinancialTransaction> liste = item.ToList();
+                liste = liste.OrderByDescending(p => p.TimeStamp).ThenByDescending(s => s.TimeStamp).ToList();
+
+                for (int j = 0; j < liste.Count(); j++)
+                {
+                    Trace.WriteLine(string.Format("{0} | {1} | {2} | {3} | {4}",
+                        liste[j].AccountNumber,
+                        liste[j].TimeStamp,
+                        liste[j].Value,
+                        liste[j].TransactionType,
+                        liste[j].Description));
+                }
+            }
+        }
+
     }
 }

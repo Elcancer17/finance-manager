@@ -7,8 +7,18 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
   <ItemGroup>
+    <AvaloniaXaml Remove="Views\Documentation\**" />
+    <Compile Remove="Views\Documentation\**" />
+    <EmbeddedResource Remove="Views\Documentation\**" />
+    <None Remove="Views\Documentation\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="Utils\IFileManager.cs" />
     <Compile Remove="Utils\JsonManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="DummyData\BANQUE.qfx" />
+    <None Remove="DummyData\CC.qfx" />
   </ItemGroup>
 
   <ItemGroup>

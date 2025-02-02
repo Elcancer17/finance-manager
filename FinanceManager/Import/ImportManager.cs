@@ -1,4 +1,6 @@
 ﻿using FinanceManager.Logging;
+using FinanceManager.ViewModels;
+using FinanceManager.Views;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -22,6 +24,11 @@ namespace FinanceManager.Import
         {
             try
             {
+                //lcLogs.ClearLogs();
+
+                FileDefinitionManager fdm = new FileDefinitionManager();
+                fdm.AddFromDragAndDrop(FileProps.FullName);
+
                 switch (FileProps.Extension.ToUpper())
                 {
                     case ".QFX":
@@ -50,6 +57,7 @@ namespace FinanceManager.Import
                                         LogLevel.Error.ToString());
                         break;
                 }
+                MainModel.LogTransactions();
             }
             catch (Exception e)
             {

@@ -9,7 +9,6 @@ using System.Linq;
 using System.Text.Json.Serialization.Metadata;
 using System;
 using System.Text.Encodings.Web;
-using System.Text.Unicode;
 
 namespace FinanceManager.Import
 {
@@ -46,6 +45,21 @@ namespace FinanceManager.Import
             JavaScriptEncoder jse2 = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
             */
 
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                WriteIndented = true,
+                TypeInfoResolver = new OrderedPropertiesJsonTypeInfoResolver(),
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            };
+            string jsonString = JsonSerializer.Serialize(obj, options);
+            File.WriteAllText(filename, jsonString);
+            Trace.WriteLine(string.Format("{0} was save.", filename), LogLevel.Information.ToString());
+        }
+
+        public static void SaveToJson<TObject>(string filename, TObject obj) where TObject : class, new()
+        {
+            if (string.IsNullOrEmpty(filename) || obj == null) { return; };
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,

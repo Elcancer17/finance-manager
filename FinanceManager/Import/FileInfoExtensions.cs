@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using FinanceManager.Domain;
 
 namespace FinanceManager.Import
 {
@@ -14,15 +13,15 @@ namespace FinanceManager.Import
         {
             if (value.Name.ToLower().Contains("visa") && value.Name.ToLower().Contains("scotia"))
             {
-                return FileDefinition.VISA_INFINITE_MOMENTUM_SCOTIA;
+                return FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA;
             }
-            else if (value.Name.ToLower().Contains("cibc"))
+            else if (value.Name.ToLower().Contains("cibc") || value.Name.ToLower().Contains("cc"))
             {
-                return FileDefinition.CIBC;
+                return FileDefinitionManager.CIBC;
             }
-            else if (value.Name.ToLower().Contains("releve"))
+            else if (value.Name.ToLower().Contains("releve") || value.Name.ToLower().Contains("desjardins") || value.Name.ToLower().Contains("banque"))
             {
-                return FileDefinition.DESJARDINS;
+                return FileDefinitionManager.DESJARDINS;
             }
             return string.Empty;
         }
