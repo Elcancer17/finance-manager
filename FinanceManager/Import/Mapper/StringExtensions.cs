@@ -238,9 +238,9 @@ namespace FinanceManager.Import.Extension
             FileDefinition fd = fdm.GetFileDefinition(FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA);
             //Sample:
             // Filtre,Date,Description,Sous-description,État,Type d’opération,Montant
-            // "Période de relevé en cours","2024-09-19","VIRGIN PLUS",,"En attente","Débit","104.68"
-            //"","2024-08-15","PAIEMENT DESJARDINS","Montreal 00","Inscrites","Crédit","2996.67"
-            //"","2024-08-15","AUBAINES YVES CROTEAU","Levis Qc","Inscrites","Débit","295.49"
+            // "Période de relevé en cours","2025-01-01","ACHAT 1",,"En attente","Débit","100.00"
+            //"","2025-01-02","ACHAT 2","Montreal 00","Inscrites","Crédit","200.00"
+            //"","2025-01-03","ACHAT 3","Levis Qc","Inscrites","Débit","300.00"
             line = line.Replace("\r", "").Replace("\"", "");
             List<string> cols = line.Split(",").ToList();
             Csv item = new Csv();
@@ -265,7 +265,7 @@ namespace FinanceManager.Import.Extension
             FileDefinitionManager fdm = new FileDefinitionManager();
             FileDefinition fd = fdm.GetFileDefinition(FileDefinitionManager.CIBC);
             // Sample: 
-            //2024-12-27,"RESTAURANT NORMANDIN LEVIS, QC",59.11,,5223********9154
+            //2025-01-01,"ACHAT 1, QC",100.00,,1234********2222
             line = line.Replace("\r", "").Replace("\"", "");
             List<string> cols = line.Split(",").ToList();
             Csv item = new Csv();
@@ -291,8 +291,8 @@ namespace FinanceManager.Import.Extension
             FileDefinitionManager fdm = new FileDefinitionManager();
             FileDefinition fd = fdm.GetFileDefinition(FileDefinitionManager.DESJARDINS);
             //Sample: 
-            //"Chaudière ","024270","EOP","2024/11/28",00001,"Paiement facture - AccèsD Internet /Immatriculations - Permis","",35.40,"","","","","",3874.40
-            //"Chaudière ","024270","EOP","2024/11/29",00004,"Virement entre folios /de 024373 EOP","","",1800.00,"","","","",5819.83
+            //"Chaudière ","123456","EOP","2025-01-01",00001,"ACHAT 1","",10.00,"","","","","",5000.00
+            //"Chaudière ","123456","EOP","2025-01-02",00004,"ACHAT 2","","",10000.00,"","","","",5000.00
             line = line.Replace("\r", "").Replace("\"", "");
             List<string> cols = line.Split(",").ToList();
             Csv item = new Csv();
