@@ -4,6 +4,7 @@
     {
         public string DefinitionType { get; set; }
         public string FileExtention { get; set; }
+        public string Compte { get; set; }
         public bool HaveHeader { get; set; }
         public bool HeaderIsEmpty { get; set; }
         public int ColumnsCount { get; set; }

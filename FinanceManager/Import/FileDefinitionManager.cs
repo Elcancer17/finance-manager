@@ -80,6 +80,7 @@ namespace FinanceManager.Import
                 new FileDefinition() { 
                     DefinitionType = VISA_INFINITE_MOMENTUM_SCOTIA,
                     FileExtention = CSV_EXTENTION,
+                    Compte = "1234000000001111",
                     ColumnsCount = 7,
                     HaveHeader = true,
                     HeaderIsEmpty = false,
@@ -101,6 +102,7 @@ namespace FinanceManager.Import
                 new FileDefinition() { 
                     DefinitionType = CIBC,
                     FileExtention = CSV_EXTENTION,
+                    Compte = "1234000000002222",
                     ColumnsCount = 6,
                     HaveHeader = false,
                     HeaderIsEmpty = true,

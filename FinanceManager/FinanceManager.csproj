@@ -16,10 +16,6 @@
     <Compile Remove="Utils\IFileManager.cs" />
     <Compile Remove="Utils\JsonManager.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="DummyData\BANQUE.qfx" />
-    <None Remove="DummyData\CC.qfx" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.3" />

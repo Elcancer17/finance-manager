@@ -245,7 +245,7 @@ namespace FinanceManager.Import.Extension
             List<string> cols = line.Split(",").ToList();
             Csv item = new Csv();
             item.Filtre = cols[fd.ColumnIndexForFiltre.ToInt()];
-            item.Compte = "4538261968031105"; // "4538261968031014";
+            item.Compte = fd.Compte;
             item.TransactionDate = cols[fd.ColumnIndexForTransactionDate.ToInt()];
             item.Description = cols[fd.ColumnIndexForDescription.ToInt()];
             item.SubDescription = cols[fd.ColumnIndexForSubDescription.ToInt()];  
@@ -282,7 +282,7 @@ namespace FinanceManager.Import.Extension
                 item.TransactionType = "CREDIT";
             }
             item.Compte = cols[fd.ColumnIndexForCompte.ToInt()];
-            item.Compte = "5223030005809154";
+            item.Compte = fd.Compte;
             return item;
         }
 
