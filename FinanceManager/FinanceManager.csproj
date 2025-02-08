@@ -26,7 +26,8 @@
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build outpuat in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.3" />
-    <PackageReference Include="bodong.Avalonia.PropertyGrid" Version="11.1.4.2" />
+    <PackageReference Include="bodong.Avalonia.PropertyGrid" Version="11.2.3.4" />
+    <PackageReference Include="bodong.PropertyModels" Version="11.2.3.4" />
     <PackageReference Include="System.Data.OleDb" Version="9.0.0" />
   </ItemGroup>
 </Project>
