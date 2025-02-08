@@ -47,17 +47,17 @@ namespace FinanceManager.Import
             return true;
         }
 
-        public override void Import()
+        public override List<FinancialTransaction> Import(List<FinancialTransaction> financialTransactions)
         {
-            List<FinancialTransaction> resultFT = null;
             try
             {
-                resultFT = Merge(GetData());
+                financialTransactions = Merge(financialTransactions, GetData());
             }
             catch (Exception e)
             {
                 Trace.WriteLine(e.Message, LogLevel.Error.ToString());
             }
+            return financialTransactions;
         }
 
         public OFX GetData()
@@ -65,13 +65,12 @@ namespace FinanceManager.Import
             return XMLManager.DeserializeXML<OFX>(fileContent, ROOT_ELEMENT_NAME);
         }
 
-        public List<FinancialTransaction> Merge(OFX ofx)
+        public List<FinancialTransaction> Merge(List<FinancialTransaction> financialTransactions, OFX ofx)
         {
-            List<FinancialTransaction> result = ftm.Load();
             try
             {
                 bool transactionAdded = false;
-                int jsonItemCount = result.Count();
+                int jsonItemCount = financialTransactions.Count();
                 int importingItemCount = 0;
                 int importedItemCount = 0;
 
@@ -87,9 +86,10 @@ namespace FinanceManager.Import
                         FinancialTransaction ft = itemL1.MapSTMTTRNToFinancialTransaction(fileProps.GetFinancialInstitutionType(), 
                                                                                           ofx.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.CCACCTFROM.ACCTID);
 
-                        if (result.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
+                        if (financialTransactions.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
                         {
-                            result.Add(ft);
+                            ft.Message = "NOUVEAU!";
+                            financialTransactions.Add(ft);
                             importedItemCount += 1;
                             transactionAdded = true;
                         }
@@ -113,9 +113,10 @@ namespace FinanceManager.Import
                                         FinancialTransaction ft = iteml3.MapSTMTTRNToFinancialTransaction(fileProps.GetFinancialInstitutionType(), 
                                                                                                           iteml2.BANKACCTFROM.BRANCHID);
 
-                                        if (result.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
+                                        if (financialTransactions.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
                                         {
-                                            result.Add(ft);
+                                            ft.Message = "NOUVEAU!";
+                                            financialTransactions.Add(ft);
                                             importedItemCount += 1;
                                             transactionAdded = true;
                                         }
@@ -130,19 +131,19 @@ namespace FinanceManager.Import
                                               jsonItemCount,
                                               importingItemCount,
                                               importedItemCount,
-                                              result.Count()),
+                                              financialTransactions.Count()),
                                 LogLevel.Information.ToString());
 
-                if (transactionAdded)
-                {
-                    ftm.Save(result);
-                }
+                //if (transactionAdded)
+                //{
+                //    ftm.Save(result);
+                //}
             }
             catch (Exception e)
             {
                 Trace.WriteLine(e.Message, LogLevel.Error.ToString());
             }
-            return result;
+            return financialTransactions;
         }
     }
 }

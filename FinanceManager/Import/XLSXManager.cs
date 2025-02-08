@@ -80,17 +80,18 @@ namespace FinanceManager.Import
             return true;
         }
 
-        public override void Import()
+        public override List<FinancialTransaction> Import(List<FinancialTransaction> financialTransactions)
         {
             List<Csv> result = new List<Csv>();
             try
             {
-                Merge(GetData());
+                financialTransactions = Merge(financialTransactions, GetData());
             }
             catch (Exception e)
             {
                 Trace.WriteLine(e.Message, LogLevel.Error.ToString());
             }
+            return financialTransactions;
         }
 
         public List<Csv> GetData()
@@ -116,11 +117,10 @@ namespace FinanceManager.Import
             return result;
         }
 
-        public List<FinancialTransaction> Merge(List<Csv> importItems)
+        public List<FinancialTransaction> Merge(List<FinancialTransaction> financialTransactions, List<Csv> importItems)
         {
-            List<FinancialTransaction> result = ftm.Load();
             bool transactionAdded = false;
-            int jsonItemCount = result.Count();
+            int jsonItemCount = financialTransactions.Count();
             int importingItemCount = importItems.Count();
             int importedItemCount = 0;
 
@@ -128,9 +128,10 @@ namespace FinanceManager.Import
             {
                 FinancialTransaction ft = itemL1.MapCsvToFinancialTransaction(fileProps.GetFinancialInstitutionType());
 
-                if (result.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
+                if (financialTransactions.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
                 {
-                    result.Add(ft);
+                    ft.Message = "NOUVEAU!";
+                    financialTransactions.Add(ft);
                     importedItemCount += 1;
                     transactionAdded = true;
                 }
@@ -140,14 +141,14 @@ namespace FinanceManager.Import
                                           jsonItemCount,
                                           importingItemCount,
                                           importedItemCount,
-                                          result.Count()),
+                                          financialTransactions.Count()),
                             LogLevel.Information.ToString());
 
-            if (transactionAdded)
-            {
-                ftm.Save(result);
-            }
-            return result;
+            //if (transactionAdded)
+            //{
+            //    ftm.Save(result);
+            //}
+            return financialTransactions;
         }
     }
 }

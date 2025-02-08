@@ -1,4 +1,5 @@
-﻿using FinanceManager.Domain;
+﻿using DynamicData.Binding;
+using FinanceManager.Domain;
 using FinanceManager.Import;
 using FinanceManager.Logging;
 using System;
@@ -24,8 +25,17 @@ namespace FinanceManager.ViewModels
                 CreateDummyData();
             }
         }
+
+        public MainModel(List<FinancialTransaction> listeFTM)
+        {
+            LoadData(listeFTM);
+            if (FinancialData.Count() == 0)
+            {
+                CreateDummyData();
+            }
+        }
         public SettingModel Settings { get; set; } = new();
-        public ObservableCollection<FinancialDisplayLine> FinancialData { get; } = new();
+        public ObservableCollection<FinancialDisplayLine> FinancialData { get; set; } = new();
 
         private List<FinancialTransaction> GenerateDummyAccounts(DateTime date, Random random)
         {
@@ -53,8 +63,9 @@ namespace FinanceManager.ViewModels
             else
                 return false;
         }
-        private void CreateDummyData()
+        public void CreateDummyData()
         {
+            FinancialData.Clear();
             Random random = new Random(0);
             const int NUMBER_OF_DAYS = 50;
             const int MAXIMUM_NUMBER_OF_LINE_PER_DAY = 5;
@@ -77,26 +88,31 @@ namespace FinanceManager.ViewModels
                 }
             }
         }
-        private void LoadData()
+        public void LoadData()
         {
             FinancialTransactionManager ftm = new FinancialTransactionManager();
-            List<FinancialTransaction> listeFTM = ftm.Load();
+            LoadData(ftm.Load());
+        }
 
-            if (listeFTM.Count() > 0)
+        public void LoadData(List<FinancialTransaction> financialTransactions)
+        {
+            if (financialTransactions.Count() > 0)
             {
-                List<IGrouping<long, FinancialTransaction>> listGroup = listeFTM.GroupBy(p => p.AccountNumber).ToList();
-                IGrouping<long, FinancialTransaction> item = listGroup[0];
-                listeFTM = item.ToList();
-                //listeFTM = listeFTM.OrderByDescending(p => p.TimeStamp).ThenByDescending(s => s.TimeStamp).ToList();
-                listeFTM = listeFTM.OrderByDescending(p => p.TimeStamp).ThenBy(s => s.TimeStamp).ToList();
-
-                for (int i = 0; i < listeFTM.Count(); i++)
+                FinancialData.Clear();
+                List<IGrouping<long, FinancialTransaction>> listAccount = financialTransactions.GroupBy(p => p.AccountNumber).ToList();
+                IGrouping<long, FinancialTransaction> item = listAccount[0];
+                for (int g = 0; g < listAccount.Count(); g++)
                 {
-                    FinancialData.Add(new FinancialDisplayLine()
+                    financialTransactions = listAccount[g].ToList();
+                    financialTransactions = financialTransactions.OrderByDescending(p => p.TimeStamp).ThenBy(s => s.TimeStamp).ToList();
+                    for (int i = 0; i < financialTransactions.Count(); i++)
                     {
-                        TimeStamp = listeFTM[i].TimeStamp,
-                        Accounts = new List<FinancialTransaction>() { listeFTM[i] }
-                    });
+                        FinancialData.Add(new FinancialDisplayLine()
+                        {
+                            TimeStamp = financialTransactions[i].TimeStamp,
+                            Accounts = new List<FinancialTransaction>() { financialTransactions[i] }
+                        });
+                    }
                 }
             }
         }

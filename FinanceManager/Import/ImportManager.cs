@@ -1,7 +1,9 @@
-﻿using FinanceManager.Logging;
+﻿using FinanceManager.Domain;
+using FinanceManager.Logging;
 using FinanceManager.ViewModels;
 using FinanceManager.Views;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -20,7 +22,7 @@ namespace FinanceManager.Import
                             LogLevel.Information.ToString());
         }
 
-        public void ImporFile()
+        public List<FinancialTransaction> ImporFile(List<FinancialTransaction> financialTransactions)
         {
             try
             {
@@ -33,15 +35,15 @@ namespace FinanceManager.Import
                 {
                     case ".QFX":
                         QuickenManager qm = new QuickenManager(FileProps.FullName);
-                        qm.Import();
+                        financialTransactions = qm.Import(financialTransactions);
                         break;
                     case ".CSV":
                         CSVManager csvm = new CSVManager(FileProps.FullName);
-                        csvm.Import();
+                        financialTransactions = csvm.Import(financialTransactions);
                         break;
                     case ".XLSX":
                         XLSXManager xlsx = new XLSXManager(FileProps.FullName);
-                        xlsx.Import();
+                        financialTransactions = xlsx.Import(financialTransactions);
                         break;
                     case ".QIF":
                     //break;
@@ -63,6 +65,7 @@ namespace FinanceManager.Import
             {
                 Trace.WriteLine(e.Message, LogLevel.Error.ToString());
             }
+            return financialTransactions;
         }
     }
 }

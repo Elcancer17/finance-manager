@@ -29,8 +29,11 @@ namespace FinanceManager.Import
         public FileDefinitionManager()
         {
             fileProps = GetFile();
-            //DefinitionList = JsonManager.LoadJson<List<FileDefinition>>(fileProps.FullName);
-            DefinitionList = GetFileDefinition();
+            DefinitionList = JsonManager.LoadJson<List<FileDefinition>>(fileProps.FullName);
+            if (DefinitionList is null || DefinitionList.Count == 0) {
+                DefinitionList = GetFileDefinition();
+                Save();
+            }
             Validate();
         }
         protected bool Validate()
@@ -52,8 +55,8 @@ namespace FinanceManager.Import
                     HaveHeader = false,
                     HeaderIsEmpty = false
                 });
+                Save();
             }
-            Save();
         }
         private List<FileDefinition> GetFileDefinition()
         {
@@ -118,6 +121,45 @@ namespace FinanceManager.Import
                     ColumnIndexForAmountDebit = "2",
                     ColumnIndexForAmountCredit = "3",
                     ColumnIndexForTotal = ""
+                },
+                new FileDefinition() {
+                    DefinitionType = CC,
+                    FileExtention = CSV_EXTENTION,
+                    Compte = "1234000000003333",
+                    ColumnsCount = 6,
+                    HaveHeader = false,
+                    HeaderIsEmpty = true,
+                    ColumnIndexForFiltre = "",
+                    ColumnIndexForCompte = "4",
+                    ColumnIndexForCompteType = "",
+                    ColumnIndexForNoSeq = "",
+                    ColumnIndexForTransactionDate = "0",
+                    ColumnIndexForDescription = "1",
+                    ColumnIndexForSubDescription = "",
+                    ColumnIndexForEtat = "",
+                    ColumnIndexForTransactionType = "",
+                    ColumnIndexForAmountDebit = "2",
+                    ColumnIndexForAmountCredit = "3",
+                    ColumnIndexForTotal = ""
+                },
+                new FileDefinition() {
+                    DefinitionType = BANQUE,
+                    FileExtention = CSV_EXTENTION,
+                    ColumnsCount = 14,
+                    HaveHeader = true,
+                    HeaderIsEmpty = true,
+                    ColumnIndexForFiltre = "0",
+                    ColumnIndexForCompte = "1",
+                    ColumnIndexForCompteType = "2",
+                    ColumnIndexForNoSeq = "4",
+                    ColumnIndexForTransactionDate = "3",
+                    ColumnIndexForDescription = "5",
+                    ColumnIndexForSubDescription = "",
+                    ColumnIndexForEtat = "",
+                    ColumnIndexForTransactionType = "",
+                    ColumnIndexForAmountDebit = "7",
+                    ColumnIndexForAmountCredit = "8",
+                    ColumnIndexForTotal = "13"
                 }
             };
         }

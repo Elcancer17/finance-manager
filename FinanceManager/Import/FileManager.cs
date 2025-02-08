@@ -1,4 +1,5 @@
 ﻿using FinanceManager.Domain;
+using System.Collections.Generic;
 using System.IO;
 
 namespace FinanceManager.Import
@@ -23,7 +24,7 @@ namespace FinanceManager.Import
 
         protected abstract void LoadFile(string filename);
         protected abstract bool Validate();
-        public abstract void Import();
+        public abstract List<FinancialTransaction> Import(List<FinancialTransaction> ft);
 
     }
 }

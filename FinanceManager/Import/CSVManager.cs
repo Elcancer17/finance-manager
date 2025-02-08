@@ -34,30 +34,30 @@ namespace FinanceManager.Import
         }
         protected override bool Validate()
         {
-            string firstLine = fileContent.GetFirstLine();
+            string line = fileContent.GetFirstLine();
             //Header validation
             if (definition.HaveHeader)
             {
                 if (!definition.HeaderIsEmpty)
                 {
-                    if (string.IsNullOrEmpty(firstLine))
+                    if (string.IsNullOrEmpty(line))
                     {
                         throw new Exception(string.Format("Error {0}: The header should not be empty",
                                                           FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA));
                     }
-                    if (!(firstLine == definition.FirstLineFr || firstLine == definition.FirstLineEn))
+                    if (!(line == definition.FirstLineFr || line == definition.FirstLineEn))
                     {
                         throw new Exception(string.Format("Error {0}: Header is not the good one for CSV file",
                                                           FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA));
                     }
                 }
-                else
-                {
-                    firstLine = fileContent.GetSecondLine();
-                }
             }
+            if (string.IsNullOrEmpty(line)) {
+                line = fileContent.GetSecondLine();
+            }
+
             //Columns validation
-            if (firstLine.Split(",").Count() != definition.ColumnsCount)
+            if (line.Split(",").Count() != definition.ColumnsCount)
             {
                 throw new Exception(string.Format("{0}: Bad columns count {1} for CSV file, expected {2}",
                                                   FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA,
@@ -67,16 +67,17 @@ namespace FinanceManager.Import
             return true;
         }
 
-        public override void Import()
+        public override List<FinancialTransaction> Import(List<FinancialTransaction> financialTransactions)
         {
             try
             {
-                Merge(GetData());
+                financialTransactions = Merge(financialTransactions, GetData());
             }
             catch (Exception e)
             {
                 Trace.WriteLine(e.Message, LogLevel.Error.ToString());
             }
+            return financialTransactions;
         }
 
         public string GetHeader(List<string> lines)
@@ -99,13 +100,13 @@ namespace FinanceManager.Import
                             result.Add(lines[i].MapVisaInfiniteMomentumScotiaLineToCsv());
                         }
                         break;
-                    case FileDefinitionManager.CIBC:
+                    case FileDefinitionManager.CIBC: case FileDefinitionManager.CC:
                         if (lines[i] != string.Empty)
                         {
                             result.Add(lines[i].MapCibcLineToCsv());
                         }
                         break;
-                    case FileDefinitionManager.DESJARDINS:
+                    case FileDefinitionManager.DESJARDINS: case FileDefinitionManager.BANQUE:
                         if (lines[i] != string.Empty)
                         {
                             result.Add(lines[i].MapDesjardinsLineToCsv());
@@ -118,11 +119,11 @@ namespace FinanceManager.Import
             return result;
         }
 
-        public List<FinancialTransaction> Merge(List<Csv> importItems)
+        public List<FinancialTransaction> Merge(List<FinancialTransaction> financialTransactions, List<Csv> importItems)
         {
-            List<FinancialTransaction> result = ftm.Load();
+            //List<FinancialTransaction> result = ftm.Load();
             bool transactionAdded = false;
-            int jsonItemCount = result.Count();
+            int jsonItemCount = financialTransactions.Count();
             int importingItemCount = importItems.Count();
             int importedItemCount = 0;
 
@@ -130,9 +131,10 @@ namespace FinanceManager.Import
             {
                 FinancialTransaction ft = itemL1.MapCsvToFinancialTransaction(fileProps.GetFinancialInstitutionType());
 
-                if (result.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
+                if (financialTransactions.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
                 {
-                    result.Add(ft);
+                    ft.Message = "NOUVEAU!";
+                    financialTransactions.Add(ft);
                     importedItemCount += 1;
                     transactionAdded = true;
                 }
@@ -142,14 +144,14 @@ namespace FinanceManager.Import
                                           jsonItemCount,
                                           importingItemCount,
                                           importedItemCount,
-                                          result.Count()),
+                                          financialTransactions.Count()),
                             LogLevel.Information.ToString());
 
-            if (transactionAdded)
-            {
-                ftm.Save(result);
-            }
-            return result;
+            //if (transactionAdded)
+            //{
+            //    ftm.Save(result);
+            //}
+            return financialTransactions;
         }
     }
 }

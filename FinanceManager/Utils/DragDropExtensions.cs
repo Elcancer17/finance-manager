@@ -34,20 +34,5 @@ namespace FinanceManager.Utils
         {
             e.DragEffects = DragDropEffects.Move;
         }
-       
-        public static void Drop(object sender, DragEventArgs e)
-        {
-            List<string> files = e.Data.GetFiles()?.Select(x => x.Path.LocalPath).ToList();
-            if (files == null)//null whenever you didnt drop a file
-            {
-                return;
-            }
-            //do something here
-            for (int i = 0; i < files.Count; i++)
-            {
-                ImportManager im = new ImportManager(files[i]);
-                im.ImporFile();
-            }
-        }
     }
 }

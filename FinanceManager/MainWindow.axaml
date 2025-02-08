@@ -14,14 +14,17 @@
 		<models:MainModel />
 	</Design.DataContext>
 	<TabControl x:Name="tcViews"
-				TabStripPlacement="Left">
-		<TabItem Header="Settings">
+				TabStripPlacement="Top">
+    <TabItem Header="Finance">
+      <views:FinanceView/>
+    </TabItem>
+    <TabItem Header="Import">
+      <views:ImportView/>
+    </TabItem>
+    <TabItem Header="Settings">
 			<views:SettingView/>
 		</TabItem>
-		<TabItem Header="Finance">
-			<views:FinanceView/>
-		</TabItem>
-		<TabItem Header="Console">
+    <TabItem Header="Console">
 			<views:LogConsoleView/>
 		</TabItem>
 	</TabControl>

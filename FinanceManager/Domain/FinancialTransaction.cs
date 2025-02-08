@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace FinanceManager.Domain
 {
@@ -24,6 +25,9 @@ namespace FinanceManager.Domain
         public bool IsValidated { get; set; }
 
         public string TransactionId { get; set; }
+
+        [JsonIgnore]
+        public string Message { get; set; }
 
         public void SetTransactionId()
         {
