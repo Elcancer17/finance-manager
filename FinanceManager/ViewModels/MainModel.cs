@@ -35,6 +35,9 @@ namespace FinanceManager.ViewModels
             }
         }
         public SettingModel Settings { get; set; } = new();
+        public FinanceModel Finance { get; set; } = new();
+
+
         public ObservableCollection<FinancialDisplayLine> FinancialData { get; set; } = new();
 
         private List<FinancialTransaction> GenerateDummyAccounts(DateTime date, Random random)

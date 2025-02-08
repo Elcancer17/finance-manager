@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		     xmlns:converters="using:FinanceManager.Utils.Converters"
 		     xmlns:models="using:FinanceManager.ViewModels"
 		     xmlns:views="using:FinanceManager.Views"
 			 xmlns:pgc="using:Avalonia.PropertyGrid.Controls"
@@ -10,17 +11,91 @@
              x:Class="FinanceManager.Views.FinanceView"
 			 DataContextChanged="UserControl_DataContextChanged"
 			 x:DataType="models:MainModel">
+	<UserControl.Resources>
+		<converters:MonthNameConverter x:Key="monthNameConverter"/>
+	</UserControl.Resources>
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
                to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
 		<models:MainModel />
 	</Design.DataContext>
-	<DataGrid x:Name="dgFinancialData"
-			  ItemsSource="{Binding FinancialData}"
-			  GridLinesVisibility="All"
-			  VerticalAlignment="Stretch">
-		<DataGrid.Columns>
-			<DataGridTextColumn Header="TimeStamp" Binding="{Binding TimeStamp, StringFormat='yyyy-MM-dd'}" IsReadOnly="True"/>
-		</DataGrid.Columns>
-	</DataGrid>
+	
+	<Grid RowDefinitions="auto, *" ColumnDefinitions="200, *">
+		
+		<ComboBox x:Name="cmbYear" 
+					SelectedItem="{Binding Path=Finance.SelectedYear}"
+					ItemsSource="{Binding Path=Finance.AvailableYears}"
+					HorizontalAlignment="Stretch"
+					Grid.Row="0"
+					Grid.Column="0"/>
+
+		<ListBox x:Name="lbMonths"
+				 SelectedItem="{Binding Path=Finance.SelectedMonth}"
+				 ItemsSource="{Binding Path=Finance.AvailableMonths}"
+				 SelectionMode="Single"
+				 Grid.Row="0"
+				 Grid.Column="1">
+			<ListBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal"/>
+				</ItemsPanelTemplate>
+			</ListBox.ItemsPanel>
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Converter={StaticResource monthNameConverter}}}"/>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+
+		<ListBox x:Name="lbAccounts" 
+				 SelectedItem="{Binding Path=Finance.SelectedAccount}"
+				 ItemsSource="{Binding Path=Finance.Accounts}"
+				 SelectionMode="Single"
+				 Grid.Row="1" 
+				 Grid.Column="0">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Grid RowDefinitions="auto, auto" ColumnDefinitions="auto, auto" >
+						<Ellipse Width="5" Height="5" Fill="Black" Margin="0,0,10,0" Grid.Row="0" Grid.Column="0"/>
+						<TextBlock Text="{Binding Path=FinancialInstitution}" Grid.Row="0" Grid.Column="1"/>
+						<TextBlock Text="{Binding Path=AccountName}" Grid.Row="1" Grid.Column="1"/>
+					</Grid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+		
+		<Grid RowDefinitions="*, auto" Grid.Row="1" Grid.Column="1">
+			<DataGrid x:Name="dgFinancialData"
+					  ItemsSource="{Binding Finance.FinancialData}"
+					  GridLinesVisibility="All"
+					  VerticalAlignment="Stretch"
+					  Grid.Row="0">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Date" Binding="{Binding Path=Transaction.TimeStamp, StringFormat='yyyy-MM-dd'}" IsReadOnly="True"/>
+					<DataGridTextColumn Header="Montant" Binding="{Binding Path=Transaction.Value, StringFormat='c'}" IsReadOnly="True"/>
+					<DataGridTextColumn Header="Description" Binding="{Binding Path=Transaction.Description}" IsReadOnly="True"/>
+					<DataGridCheckBoxColumn Header="Validé" Binding="{Binding Path=Transaction.IsValidated}" IsReadOnly="False"/>
+					<DataGridTextColumn Header="Total" Binding="{Binding Path=Total}" IsReadOnly="True"/>
+				</DataGrid.Columns>
+			</DataGrid>
+			<Grid ColumnDefinitions="auto, auto, *, auto" Grid.Row="1">
+				<Button x:Name="btnAdd" 
+						Content="Ajouter" 
+						Margin="5" 
+						Padding="20,5,20,5" 
+						Grid.Column="0"
+						Click="btnAdd_Click" />
+				<Button x:Name="btnDelete" 
+						Content="Supprimer" 
+						Padding="20,5,20,5" 
+						Grid.Column="1"
+						Click="btnDelete_Click" />
+				<Button x:Name="btnSave" 
+						Content="Sauvegarder"  
+						Padding="20,5,20,5" 
+						Grid.Column="3"
+						Click="btnSave_Click" />
+			</Grid>
+		</Grid>
+	</Grid>
 </UserControl>
