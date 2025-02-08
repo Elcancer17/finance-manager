@@ -13,6 +13,7 @@ using FinanceManager.Utils;
 using FinanceManager.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -35,10 +36,12 @@ public partial class FinanceView : UserControl
             model.Finance.SelectedYearChanged -= OnSelectedYearChanged;
             model.Finance.SelectedMonthChanged -= OnSelectedMonthChanged;
             model.Finance.SelectedAccountChanged -= OnSelectedAccountChanged;
+            model.Finance.FinancialData.CollectionChanged -= FinancialData_CollectionChanged;
 
             model.Finance.SelectedYearChanged += OnSelectedYearChanged;
             model.Finance.SelectedMonthChanged += OnSelectedMonthChanged;
             model.Finance.SelectedAccountChanged += OnSelectedAccountChanged;
+            model.Finance.FinancialData.CollectionChanged += FinancialData_CollectionChanged;
         }
     }
 
@@ -57,6 +60,12 @@ public partial class FinanceView : UserControl
 
     }
 
+    private void FinancialData_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        Model.Finance.CalculateFinancialDataTotals();
+    }
+
+
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
     
@@ -70,5 +79,13 @@ public partial class FinanceView : UserControl
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
 
+    }
+
+    private void btnEdit_Click(object sender, RoutedEventArgs e)
+    {
+        if(sender is Button button && button.Tag is FinancialTransactionDisplay editedElement)
+        {
+
+        }
     }
 }

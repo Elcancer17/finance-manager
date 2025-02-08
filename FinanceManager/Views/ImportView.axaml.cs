@@ -14,12 +14,12 @@ using FinanceManager.Logging;
 using FinanceManager.Import;
 using static System.Net.WebRequestMethods;
 using DynamicData;
+using System.Collections.Specialized;
 
 namespace FinanceManager.Views;
 
 public partial class ImportView : UserControl
 {
-    private DataGridTextColumn timeStampColumn;
     List<FinancialTransaction> fts;
     FinancialTransactionManager ftm;
 
@@ -27,9 +27,8 @@ public partial class ImportView : UserControl
     public ImportView()
     {
         InitializeComponent();
-        dgFinancialData.AddDragDropHandler(Drop);
+        dgImportedData.AddDragDropHandler(Drop);
         //lcLogs.AddDragDropHandler(DragDropExtensions.Drop);
-        timeStampColumn = (DataGridTextColumn)dgFinancialData.Columns.Single();
         ftm = new FinancialTransactionManager();
         fts = ftm.Load();
     }
@@ -75,48 +74,14 @@ public partial class ImportView : UserControl
     {
         if (DataContext is MainModel model)
         {
-            GenerateColumns(model.FinancialData.First().Accounts.Select(x => x.FinancialInstitution).ToList());
+            model.Import.ImportedData.CollectionChanged -= ImportedData_CollectionChanged;
+
+            model.Import.ImportedData.CollectionChanged += ImportedData_CollectionChanged;
         }
     }
 
-    private void GenerateColumns(IReadOnlyList<string> financialInstitutions)
+    private void ImportedData_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        for (int i = dgFinancialData.Columns.Count - 1; i > 0; i--)
-        {
-            if (dgFinancialData.Columns[i] != timeStampColumn)
-            {
-                dgFinancialData.Columns.RemoveAt(i);
-            }
-        }
-        for (int i = 0; i < financialInstitutions.Count; i++)
-        {
-            DataGridColoredTextColumn<decimal> valueColumn = new()
-            {
-                Header = financialInstitutions[i],
-                Width = DataGridLength.Auto,
-                Binding = new Binding($"{nameof(FinancialDisplayLine.Accounts)}[{i}].{nameof(FinancialTransaction.Value)}"),
-                ColorFunc = SelectColor,
-                IsReadOnly = true,
-            };
-            dgFinancialData.Columns.Add(valueColumn);
-            DataGridCheckBoxColumn isValidatedColumn = new()
-            {
-                Header = "Is Validated",
-                Binding = new Binding($"{nameof(FinancialDisplayLine.Accounts)}[{i}].{nameof(FinancialTransaction.IsValidated)}")
-            };
-            dgFinancialData.Columns.Add(isValidatedColumn);
-        }
-    }
-
-    private IBrush SelectColor(decimal value)
-    {
-        if (value >= 0)
-        {
-            return Brushes.LightGreen;
-        }
-        else
-        {
-            return Brushes.OrangeRed;
-        }
+        Model.Import.CalculateImportedDataTotals();
     }
 }
