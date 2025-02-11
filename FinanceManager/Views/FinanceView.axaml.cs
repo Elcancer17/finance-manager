@@ -1,23 +1,8 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Data.Converters;
-using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using Avalonia.PropertyGrid.Controls;
-using FinanceManager.Domain;
-using FinanceManager.Logging;
-using FinanceManager.Utils;
 using FinanceManager.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.Serialization;
 
 namespace FinanceManager.Views;
 

@@ -72,7 +72,9 @@
 					  Background="Transparent"
 					  Grid.Row="0">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Date" Binding="{Binding Path=Transaction.TimeStamp, StringFormat='yyyy-MM-dd'}" IsReadOnly="True"/>
+          <DataGridTextColumn Header="Compte" Binding="{Binding Path=Transaction.FinancialInstitution}" IsReadOnly="False"/>
+          <DataGridTextColumn Header="Compte" Binding="{Binding Path=Transaction.AccountNumber}" IsReadOnly="False"/>
+          <DataGridTextColumn Header="Date" Binding="{Binding Path=Transaction.TimeStamp, StringFormat='yyyy-MM-dd'}" IsReadOnly="True"/>
 					<DataGridTextColumn Header="Montant" Binding="{Binding Path=Transaction.Value, StringFormat='c'}" IsReadOnly="True"/>
 					<DataGridTextColumn Header="Description" Binding="{Binding Path=Transaction.Description}" IsReadOnly="True"/>
 					<DataGridCheckBoxColumn Header="Validé" Binding="{Binding Path=Transaction.IsValidated}" IsReadOnly="False"/>

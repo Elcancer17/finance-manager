@@ -61,7 +61,7 @@ namespace FinanceManager.ViewModels
             ];
 
 
-        public ObservableCollection<FinancialTransactionDisplay> FinancialData { get; } = new();
+        public ObservableCollection<FinancialTransactionDisplay> FinancialData { get; set; } = new();
         public void CalculateFinancialDataTotals()
         {
             decimal currentTotal = 0;

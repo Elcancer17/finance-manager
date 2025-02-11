@@ -1,7 +1,6 @@
 ﻿using FinanceManager.Domain;
 using FinanceManager.Logging;
 using FinanceManager.ViewModels;
-using FinanceManager.Views;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,8 +25,6 @@ namespace FinanceManager.Import
         {
             try
             {
-                //lcLogs.ClearLogs();
-
                 FileDefinitionManager fdm = new FileDefinitionManager();
                 fdm.AddFromDragAndDrop(FileProps.FullName);
 

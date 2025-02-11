@@ -1,8 +1,6 @@
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using FinanceManager.Domain;
 using FinanceManager.Utils;
 using FinanceManager.ViewModels;
@@ -12,9 +10,8 @@ using System;
 using System.Linq;
 using FinanceManager.Logging;
 using FinanceManager.Import;
-using static System.Net.WebRequestMethods;
-using DynamicData;
 using System.Collections.Specialized;
+using System.Reactive.Linq;
 
 namespace FinanceManager.Views;
 
@@ -28,46 +25,45 @@ public partial class ImportView : UserControl
     {
         InitializeComponent();
         dgImportedData.AddDragDropHandler(Drop);
-        //lcLogs.AddDragDropHandler(DragDropExtensions.Drop);
         ftm = new FinancialTransactionManager();
         fts = ftm.Load();
     }
 
     private void Drop(object sender, DragEventArgs e)
     {
-        //lcLogs.ClearLogs();
+        lcLogsImport.ClearLogs();
         List<string> files = e.Data.GetFiles()?.Select(x => x.Path.LocalPath).ToList();
         if (files == null)//null whenever you didnt drop a file
         {
             return;
         }
-        //do something here
+
         for (int i = 0; i < files.Count; i++)
         {
             Trace.WriteLine(files[i], LogLevel.Information.ToString());
             ImportManager im = new ImportManager(files[i]);
             fts = im.ImporFile(fts);
         }
-        //Model.CreateDummyData();
-        Model.LoadData(fts);
+        Model.LoadImportedData(fts);
     }
 
-    //Private void MainUserControl_GotFocus(ByVal sender as Object, ByVal e as EventArgs) Handles Me.GotFocus
-    //MessageBox.Show("got focus")
-    //End Sub
 
-    //private void Focus(object sender, RoutedEventArgs e)
-    //{
-    //    string aaa = "";
-    //}
-
-    private void btnClear_Click(object sender, RoutedEventArgs e)
+    private void btnClearTransactions_Click(object sender, RoutedEventArgs e)
     {
-        //lcLogs.ClearLogs();
+        Model.Import.ImportedData.Clear();
+        fts.Clear();
     }
+
+
+    private void btnClearLogs_Click(object sender, RoutedEventArgs e)
+    {
+        lcLogsImport.ClearLogs();
+    }
+
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
         ftm.Save(fts);
+        Model.LoadFinancialData() ;
     }
 
     private void UserControl_DataContextChanged(object sender, EventArgs e)
