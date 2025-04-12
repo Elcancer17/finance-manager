@@ -11,7 +11,8 @@ namespace FinanceManager.Import
 
         public static string GetFinancialInstitutionType(this FileInfo value)
         {
-            if (value.Name.ToLower().Contains("visa") && value.Name.ToLower().Contains("scotia"))
+            if ((value.Name.ToLower().Contains("visa") && value.Name.ToLower().Contains("scotia"))
+                || value.Name.ToLower().Contains("pcbanking"))
             {
                 return FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA;
             }

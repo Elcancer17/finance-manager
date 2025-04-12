@@ -1,18 +1,27 @@
-﻿using System;
+﻿using FinanceManager.Domain;
+using FinanceManager.Import;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace FinanceManager.ViewModels
 {
     public class FinanceModel : ReactiveUI.ReactiveObject
     {
+
         public EventHandler<int> SelectedYearChanged;
         public EventHandler<int> SelectedMonthChanged;
         public EventHandler<AccountDisplay> SelectedAccountChanged;
 
+        public FinanceModel()
+        {
+            Accounts = GetDummyAccounts();
+        }
 
         private int selectedYear = DateTime.Now.Year;
         public int SelectedYear 
@@ -49,7 +58,12 @@ namespace FinanceManager.ViewModels
                 SelectedAccountChanged?.Invoke(this, value);
             }
         }
-        public ObservableCollection<AccountDisplay> Accounts { get; } = [
+
+        public ObservableCollection<AccountDisplay> Accounts { get; }
+
+        public ObservableCollection<AccountDisplay> GetDummyAccounts()
+        {
+            return [
              new AccountDisplay(){
                  AccountName = "Compte #1",
                  FinancialInstitution = "Desjardins"
@@ -59,7 +73,7 @@ namespace FinanceManager.ViewModels
                  FinancialInstitution = "Desjardins"
              }
             ];
-
+        }
 
         public ObservableCollection<FinancialTransactionDisplay> FinancialData { get; set; } = new();
         public void CalculateFinancialDataTotals()

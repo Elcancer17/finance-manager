@@ -17,7 +17,7 @@ namespace FinanceManager.Import
         {
             ftm = new FinancialTransactionManager();
             fileProps = new FileInfo(filename);
-            definition = new FileDefinitionManager().GetFileDefinition(fileProps.GetFinancialInstitutionType());
+            definition = FileDefinitionManager.GetFileDefinition(fileProps.GetFinancialInstitutionType());
             LoadFile(filename);
             Validate();
         }

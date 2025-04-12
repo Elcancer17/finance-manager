@@ -14,15 +14,10 @@ namespace FinanceManager.Views;
 
 public partial class LogConsoleView : UserControl
 {
-    List<FinancialTransaction> fts;
-    FinancialTransactionManager ftm;
-
     public LogConsoleView()
     {
         InitializeComponent();
         lcLogs.AddDragDropHandler(Drop);
-        ftm = new FinancialTransactionManager();
-        fts = ftm.Load();
     }
 
     private void btnClear_Click(object sender, RoutedEventArgs e)
@@ -41,9 +36,6 @@ public partial class LogConsoleView : UserControl
         for (int i = 0; i < files.Count; i++)
         {
             Trace.WriteLine(files[i], LogLevel.Information.ToString());
-            ImportManager im = new ImportManager(files[i]);
-            fts = im.ImporFile(fts);
         }
-        //ftm.Save(fts);
     }
 }

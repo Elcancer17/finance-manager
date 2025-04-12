@@ -8,38 +8,35 @@ using System.IO;
 
 namespace FinanceManager.Import
 {
-    public class ImportManager
+    public static class ImportManager
     {
-        private FileInfo FileProps { get; set; }
-
-        public ImportManager(string filename)
-        {
-            FileProps = new FileInfo(filename);
-            Trace.WriteLine(string.Format("Processing {0} file: {1}",
-                                          FileProps.Extension.ToUpper().Replace(".", ""),
-                                          filename),
-                            LogLevel.Information.ToString());
-        }
-
-        public List<FinancialTransaction> ImporFile(List<FinancialTransaction> financialTransactions)
+        public static List<FinancialTransaction> ImporFile(string filename, List<FinancialTransaction> financialTransactions)
         {
             try
             {
-                FileDefinitionManager fdm = new FileDefinitionManager();
-                fdm.AddFromDragAndDrop(FileProps.FullName);
+                FileInfo fileProps = new FileInfo(filename);
+                Trace.WriteLine(string.Format("Processing {0} file: {1}",
+                                              fileProps.Extension.ToUpper().Replace(".", ""),
+                                              filename),
+                                LogLevel.Information.ToString());
+                
+                if (!fileProps.Exists) return financialTransactions;
 
-                switch (FileProps.Extension.ToUpper())
+                //FileDefinitionManager fdm = new FileDefinitionManager();
+                //fdm.ImportFile(FileProps.FullName);
+
+                switch (fileProps.Extension.ToUpper())
                 {
                     case ".QFX":
-                        QuickenManager qm = new QuickenManager(FileProps.FullName);
+                        QuickenManager qm = new QuickenManager(fileProps.FullName);
                         financialTransactions = qm.Import(financialTransactions);
                         break;
                     case ".CSV":
-                        CSVManager csvm = new CSVManager(FileProps.FullName);
+                        CSVManager csvm = new CSVManager(fileProps.FullName);
                         financialTransactions = csvm.Import(financialTransactions);
                         break;
                     case ".XLSX":
-                        XLSXManager xlsx = new XLSXManager(FileProps.FullName);
+                        XLSXManager xlsx = new XLSXManager(fileProps.FullName);
                         financialTransactions = xlsx.Import(financialTransactions);
                         break;
                     case ".QIF":
@@ -52,7 +49,7 @@ namespace FinanceManager.Import
                     //break;
                     default:
                         Trace.WriteLine(string.Format("Unsupported format: {0}",
-                                        FileProps.Extension.ToUpper()),
+                                        fileProps.Extension.ToUpper()),
                                         LogLevel.Error.ToString());
                         break;
                 }

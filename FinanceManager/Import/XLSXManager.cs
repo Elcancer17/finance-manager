@@ -131,6 +131,7 @@ namespace FinanceManager.Import
                 if (financialTransactions.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
                 {
                     ft.Message = "NOUVEAU!";
+                    ft.IsNew = true;
                     financialTransactions.Add(ft);
                     importedItemCount += 1;
                     transactionAdded = true;

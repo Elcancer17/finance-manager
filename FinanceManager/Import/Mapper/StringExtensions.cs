@@ -234,8 +234,7 @@ namespace FinanceManager.Import.Extension
         }
         public static Csv MapVisaInfiniteMomentumScotiaLineToCsv(this string line)
         {
-            FileDefinitionManager fdm = new FileDefinitionManager();
-            FileDefinition fd = fdm.GetFileDefinition(FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA);
+            FileDefinition fd = FileDefinitionManager.GetFileDefinition(FileDefinitionManager.VISA_INFINITE_MOMENTUM_SCOTIA);
             //Sample:
             // Filtre,Date,Description,Sous-description,État,Type d’opération,Montant
             // "Période de relevé en cours","2025-01-01","ACHAT 1",,"En attente","Débit","100.00"
@@ -262,8 +261,7 @@ namespace FinanceManager.Import.Extension
 
         public static Csv MapCibcLineToCsv(this string line)
         {
-            FileDefinitionManager fdm = new FileDefinitionManager();
-            FileDefinition fd = fdm.GetFileDefinition(FileDefinitionManager.CIBC);
+            FileDefinition fd = FileDefinitionManager.GetFileDefinition(FileDefinitionManager.CIBC);
             // Sample: 
             //2025-01-01,"ACHAT 1, QC",100.00,,1234********2222
             line = line.Replace("\r", "").Replace("\"", "");
@@ -288,8 +286,7 @@ namespace FinanceManager.Import.Extension
 
         public static Csv MapDesjardinsLineToCsv(this string line)
         {
-            FileDefinitionManager fdm = new FileDefinitionManager();
-            FileDefinition fd = fdm.GetFileDefinition(FileDefinitionManager.DESJARDINS);
+            FileDefinition fd = FileDefinitionManager.GetFileDefinition(FileDefinitionManager.DESJARDINS);
             //Sample: 
             //"Chaudière ","123456","EOP","2025-01-01",00001,"ACHAT 1","",10.00,"","","","","",5000.00
             //"Chaudière ","123456","EOP","2025-01-02",00004,"ACHAT 2","","",10000.00,"","","","",5000.00

@@ -7,9 +7,13 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
   <ItemGroup>
+    <AvaloniaXaml Remove="DummyData\**" />
     <AvaloniaXaml Remove="Views\Documentation\**" />
+    <Compile Remove="DummyData\**" />
     <Compile Remove="Views\Documentation\**" />
+    <EmbeddedResource Remove="DummyData\**" />
     <EmbeddedResource Remove="Views\Documentation\**" />
+    <None Remove="DummyData\**" />
     <None Remove="Views\Documentation\**" />
   </ItemGroup>
   <ItemGroup>

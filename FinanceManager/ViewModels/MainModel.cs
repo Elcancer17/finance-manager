@@ -1,5 +1,7 @@
-﻿using FinanceManager.Domain;
+﻿using Avalonia.Controls;
+using FinanceManager.Domain;
 using FinanceManager.Import;
+using FinanceManager.Import.Extension;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,19 +11,43 @@ namespace FinanceManager.ViewModels
 {
     public class MainModel : ReactiveUI.ReactiveObject
     {
+        List<FinancialTransaction> financialTransactions;
+        FinancialTransactionManager financialTransactionManager = new FinancialTransactionManager();
+
         public MainModel()
         {
-            LoadFinancialData();
+            Load();
         }
 
         public SettingModel Settings { get; set; } = new();
         public FinanceModel Finance { get; set; } = new();
         public ImportModel Import { get; set; } = new();
 
+        public void Load()
+        {
+            LoadFinancialData();
+            LoadAccounts();
+        }
+
         public void LoadFinancialData()
         {
-            FinancialTransactionManager ftm = new FinancialTransactionManager();
-            LoadFinancialData(ftm.Load());
+            financialTransactions = financialTransactionManager.Load();
+            LoadFinancialData(financialTransactionManager.Load());
+        }
+
+        public void LoadFinancialData(long accountNumber)
+        {
+            financialTransactions = financialTransactionManager.Load();
+            financialTransactions = financialTransactions.Where(p => p.AccountNumber == accountNumber).ToList();
+            Finance.FinancialData.Clear();
+            if (financialTransactions.Count() > 0)
+            {
+                financialTransactions = financialTransactions.OrderBy(p => p.FinancialInstitution).ThenBy(s => s.AccountNumber).ThenBy(s => s.TimeStamp).ToList();
+                for (int i = 0; i < financialTransactions.Count(); i++)
+                {
+                    Finance.FinancialData.Add(new FinancialTransactionDisplay(financialTransactions[i]));
+                }
+            }
         }
 
         public void LoadFinancialData(List<FinancialTransaction> financialTransactions)
@@ -37,15 +63,40 @@ namespace FinanceManager.ViewModels
             }
         }
 
-        public void LoadImportedData(List<FinancialTransaction> financialTransactions)
+        public void LoadAccounts()
+        {
+            Finance.Accounts.Clear();
+            foreach (var item in financialTransactions.GroupBy(p => new { p.FinancialInstitution, p.FinancialInstitutionType, p.AccountNumber })
+                                                       .Select(p => new { p.Key.FinancialInstitution, p.Key.FinancialInstitutionType, p.Key.AccountNumber }))
+            {
+                Finance.Accounts.Add(new AccountDisplay() { FinancialInstitution = item.FinancialInstitution,
+                                                            FinancialInstitutionType = item.FinancialInstitutionType,
+                                                            AccountNumber = item.AccountNumber });
+            };
+        }
+
+        public void LoadAccounts(List<FileDefinition> definitionList)
+        {
+            Finance.Accounts.Clear();
+            if (definitionList.Count() > 0)
+            {
+                definitionList = definitionList.OrderBy(p => p.Order).ThenBy(s => s.DefinitionType).ThenBy(s => s.Compte).ToList();
+                for (int i = 0; i < definitionList.Count(); i++)
+                {
+                    Finance.Accounts.Add(new AccountDisplay() { FinancialInstitution = definitionList[i].DefinitionType, AccountNumber = definitionList[i].Compte.ToLong() });
+                }
+            }
+        }
+               
+        public void LoadImportedData()
         {
             Import.ImportedData.Clear();
-            if (financialTransactions.Count() > 0)
+            if (Import.financialTransactions.Count() > 0)
             {
-                financialTransactions = financialTransactions.OrderBy(p => p.FinancialInstitution).ThenBy(s => s.AccountNumber).ThenBy(s => s.TimeStamp).ToList();
-                for (int i = 0; i < financialTransactions.Count(); i++)
+                Import.financialTransactions = Import.financialTransactions.OrderBy(p => p.FinancialInstitution).ThenBy(s => s.AccountNumber).ThenBy(s => s.TimeStamp).ToList();
+                for (int i = 0; i < Import.financialTransactions.Count(); i++)
                 {
-                    Import.ImportedData.Add(new FinancialTransactionDisplay(financialTransactions[i]));
+                    Import.ImportedData.Add(new FinancialTransactionDisplay(Import.financialTransactions[i]));
                 }
             }
         }

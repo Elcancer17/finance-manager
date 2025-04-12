@@ -19,10 +19,10 @@
                to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
 		<models:MainModel />
 	</Design.DataContext>
-	
+
 	<Grid RowDefinitions="auto, *" ColumnDefinitions="200, *">
-		
-		<ComboBox x:Name="cmbYear" 
+
+		<ComboBox x:Name="cmbYear"
 					SelectedItem="{Binding Path=Finance.SelectedYear}"
 					ItemsSource="{Binding Path=Finance.AvailableYears}"
 					HorizontalAlignment="Stretch"
@@ -47,11 +47,11 @@
 			</ListBox.ItemTemplate>
 		</ListBox>
 
-		<ListBox x:Name="lbAccounts" 
+		<ListBox x:Name="lbAccounts"
 				 SelectedItem="{Binding Path=Finance.SelectedAccount}"
 				 ItemsSource="{Binding Path=Finance.Accounts}"
 				 SelectionMode="Single"
-				 Grid.Row="1" 
+				 Grid.Row="1"
 				 Grid.Column="0">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
@@ -59,11 +59,12 @@
 						<Ellipse Width="5" Height="5" Fill="Black" Margin="0,0,10,0" Grid.Row="0" Grid.Column="0"/>
 						<TextBlock Text="{Binding Path=FinancialInstitution}" Grid.Row="0" Grid.Column="1"/>
 						<TextBlock Text="{Binding Path=AccountName}" Grid.Row="1" Grid.Column="1"/>
+						<TextBlock Text="{Binding Path=AccountNumber}" Grid.Row="2" Grid.Column="1"/>
 					</Grid>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-		
+
 		<Grid RowDefinitions="*, auto" Grid.Row="1" Grid.Column="1">
 			<DataGrid x:Name="dgFinancialData"
 					  ItemsSource="{Binding Finance.FinancialData}"
@@ -72,9 +73,9 @@
 					  Background="Transparent"
 					  Grid.Row="0">
 				<DataGrid.Columns>
-          <DataGridTextColumn Header="Compte" Binding="{Binding Path=Transaction.FinancialInstitution}" IsReadOnly="False"/>
-          <DataGridTextColumn Header="Compte" Binding="{Binding Path=Transaction.AccountNumber}" IsReadOnly="False"/>
-          <DataGridTextColumn Header="Date" Binding="{Binding Path=Transaction.TimeStamp, StringFormat='yyyy-MM-dd'}" IsReadOnly="True"/>
+					<DataGridTextColumn Header="Compte" Binding="{Binding Path=Transaction.FinancialInstitution}" IsReadOnly="False"/>
+					<DataGridTextColumn Header="Compte" Binding="{Binding Path=Transaction.AccountNumber}" IsReadOnly="False"/>
+					<DataGridTextColumn Header="Date" Binding="{Binding Path=Transaction.TimeStamp, StringFormat='yyyy-MM-dd'}" IsReadOnly="True"/>
 					<DataGridTextColumn Header="Montant" Binding="{Binding Path=Transaction.Value, StringFormat='c'}" IsReadOnly="True"/>
 					<DataGridTextColumn Header="Description" Binding="{Binding Path=Transaction.Description}" IsReadOnly="True"/>
 					<DataGridCheckBoxColumn Header="Validé" Binding="{Binding Path=Transaction.IsValidated}" IsReadOnly="False"/>
@@ -89,23 +90,76 @@
 				</DataGrid.Columns>
 			</DataGrid>
 			<Grid ColumnDefinitions="auto, auto, *, auto" Grid.Row="1">
-				<Button x:Name="btnAdd" 
-						Content="Ajouter" 
-						Margin="5" 
-						Padding="20,5,20,5" 
+				<Button x:Name="btnAdd"
+						Content="Ajouter"
+						Margin="5"
+						Padding="20,5,20,5"
 						Grid.Column="0"
 						Click="btnAdd_Click" />
-				<Button x:Name="btnDelete" 
-						Content="Supprimer" 
-						Padding="20,5,20,5" 
+				<Button x:Name="btnDelete"
+						Content="Supprimer"
+						Padding="20,5,20,5"
 						Grid.Column="1"
 						Click="btnDelete_Click" />
-				<Button x:Name="btnSave" 
-						Content="Sauvegarder"  
-						Padding="20,5,20,5" 
+				<Button x:Name="btnSave"
+						Content="Sauvegarder"
+						Padding="20,5,20,5"
 						Grid.Column="3"
 						Click="btnSave_Click" />
+				<ToggleButton
+						x:Name="OpenClosePopupButton"
+						Grid.Column="2"
+						Content="Open/Close Popup"
+						Click="btnPopup_Click" />
+				<!--<Button Content="Show Popup"
+						Name="OpenClosePopupButton"
+						Click="OnPopupButton_Click" />-->
 			</Grid>
+			<Popup x:Name="ThePopup"
+					   Grid.Row="1"
+					   IsOpen="{Binding Path=IsChecked, ElementName=OpenClosePopupButton, Mode=TwoWay}"
+					   PlacementMode="Bottom"
+					   PlacementTarget="{Binding ElementName=OpenClosePopupButton}">
+				<Border BorderThickness="0.75"
+                    BorderBrush="Black"
+                    Padding="6,3"
+                    Background="White">
+					<Grid x:Name="PopupsContent"
+					  Background="Gray"
+					  Width="1000"
+					  Height="200">
+						<TextBlock Text="Popup's Content"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+					</Grid>
+				</Border>
+			</Popup>
+			<!--<Window.Styles>-->
+			<!--<Style Selector="CustomPresenter">
+					<Setter Property="Template">
+						<ControlTemplate>
+							<Border BorderThickness="0.75"
+									BorderBrush="Black"
+									Padding="6,3"
+									Background="White">
+								<TextBlock Text="Hello World" />
+							</Border>
+						</ControlTemplate>
+					</Setter>
+				</Style>-->
+			<!--</Window.Styles>-->
+			<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+				<!--<Button Content="Show Popup" Name="popupButton" Click="OnPopupButton_Click" />-->
+				<!--<Popup Name="Popup"
+				WindowManagerAddShadowHint="False"
+				StaysOpen="False"
+				PlacementMode="Bottom"
+				PlacementTarget="{Binding ElementName=popupButton}">
+				-->
+				<!--<CustomPresenter />-->
+				<!--
+			</Popup>-->
+			</StackPanel>
 		</Grid>
 	</Grid>
 </UserControl>

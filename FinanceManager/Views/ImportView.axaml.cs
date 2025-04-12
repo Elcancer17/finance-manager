@@ -17,41 +17,40 @@ namespace FinanceManager.Views;
 
 public partial class ImportView : UserControl
 {
-    List<FinancialTransaction> fts;
-    FinancialTransactionManager ftm;
+    List<FinancialTransaction> financialTransactions;
+    FinancialTransactionManager financialTransactionManager = new FinancialTransactionManager();
 
     private MainModel Model => DataContext as MainModel;
     public ImportView()
     {
         InitializeComponent();
         dgImportedData.AddDragDropHandler(Drop);
-        ftm = new FinancialTransactionManager();
-        fts = ftm.Load();
     }
 
     private void Drop(object sender, DragEventArgs e)
     {
         lcLogsImport.ClearLogs();
         List<string> files = e.Data.GetFiles()?.Select(x => x.Path.LocalPath).ToList();
-        if (files == null)//null whenever you didnt drop a file
+        if (files == null && files.Count > 0)//null whenever you didnt drop a file
         {
             return;
         }
 
+        List<string> accountNumberList = new List<string>();
+
+        Model.Import.Load();
         for (int i = 0; i < files.Count; i++)
         {
-            Trace.WriteLine(files[i], LogLevel.Information.ToString());
-            ImportManager im = new ImportManager(files[i]);
-            fts = im.ImporFile(fts);
+            Model.Import.financialTransactions = ImportManager.ImporFile(files[i], Model.Import.financialTransactions);
         }
-        Model.LoadImportedData(fts);
-    }
 
+        Model.LoadImportedData();
+    }
 
     private void btnClearTransactions_Click(object sender, RoutedEventArgs e)
     {
-        Model.Import.ImportedData.Clear();
-        fts.Clear();
+        Model.Import.financialTransactions.Clear();
+        Model.LoadImportedData();
     }
 
 
@@ -62,8 +61,12 @@ public partial class ImportView : UserControl
 
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
-        ftm.Save(fts);
-        Model.LoadFinancialData() ;
+        financialTransactionManager.Save(Model.Import.financialTransactions);
+        Model.LoadFinancialData();
+        Model.LoadAccounts();
+        Model.Import.financialTransactions.Clear();
+        Model.LoadImportedData();
+        lcLogsImport.ClearLogs();
     }
 
     private void UserControl_DataContextChanged(object sender, EventArgs e)

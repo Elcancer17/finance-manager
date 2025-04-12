@@ -8,13 +8,13 @@
         x:Class="FinanceManager.MainWindow"
         Title="FinanceManager"
 		x:DataType="models:MainModel">
-	<Design.DataContext>
-		<!-- This only sets the DataContext for the previewer in an IDE,
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
                to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-		<models:MainModel />
-	</Design.DataContext>
-	<TabControl x:Name="tcViews"
-				TabStripPlacement="Top">
+    <models:MainModel />
+  </Design.DataContext>
+  <TabControl x:Name="tcViews" SelectionChanged="TcViews_SelectionChanged"
+              TabStripPlacement="Top">
     <TabItem Header="Finance">
       <views:FinanceView/>
     </TabItem>
@@ -22,10 +22,10 @@
       <views:ImportView/>
     </TabItem>
     <TabItem Header="Settings">
-			<views:SettingView/>
-		</TabItem>
+      <views:SettingView/>
+    </TabItem>
     <TabItem Header="Console">
-			<views:LogConsoleView/>
-		</TabItem>
-	</TabControl>
+      <views:LogConsoleView/>
+    </TabItem>
+  </TabControl>
 </Window>

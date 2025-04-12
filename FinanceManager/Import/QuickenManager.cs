@@ -73,6 +73,7 @@ namespace FinanceManager.Import
                 int jsonItemCount = financialTransactions.Count();
                 int importingItemCount = 0;
                 int importedItemCount = 0;
+                string accountNumber;
 
                 //Manage creditcard transaction
                 if (ofx.CREDITCARDMSGSRSV1 != null &&
@@ -83,12 +84,14 @@ namespace FinanceManager.Import
                     importingItemCount += ofx.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN.Count();
                     foreach (STMTTRN itemL1 in ofx.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN)
                     {
-                        FinancialTransaction ft = itemL1.MapSTMTTRNToFinancialTransaction(fileProps.GetFinancialInstitutionType(), 
-                                                                                          ofx.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.CCACCTFROM.ACCTID);
+                        accountNumber = ofx.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.CCACCTFROM.ACCTID;
+                        FinancialTransaction ft = itemL1.MapSTMTTRNToFinancialTransaction(fileProps.GetFinancialInstitutionType(),
+                                                                                          accountNumber);
 
                         if (financialTransactions.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
                         {
                             ft.Message = "NOUVEAU!";
+                            ft.IsNew = true;
                             financialTransactions.Add(ft);
                             importedItemCount += 1;
                             transactionAdded = true;
@@ -110,12 +113,16 @@ namespace FinanceManager.Import
                                     importingItemCount += iteml2.BANKTRANLIST.STMTTRN.Count();
                                     foreach (STMTTRN iteml3 in iteml2.BANKTRANLIST.STMTTRN)
                                     {
-                                        FinancialTransaction ft = iteml3.MapSTMTTRNToFinancialTransaction(fileProps.GetFinancialInstitutionType(), 
-                                                                                                          iteml2.BANKACCTFROM.BRANCHID);
+                                        accountNumber = iteml2.BANKACCTFROM.BRANCHID;
+                                        //FileDefinitionManager.ImportFile(FileProps.FullName);
+
+                                        FinancialTransaction ft = iteml3.MapSTMTTRNToFinancialTransaction(fileProps.GetFinancialInstitutionType(),
+                                                                                                          accountNumber);
 
                                         if (financialTransactions.FirstOrDefault(s => s.TransactionId == ft.TransactionId) == null)
                                         {
                                             ft.Message = "NOUVEAU!";
+                                            ft.IsNew = true;
                                             financialTransactions.Add(ft);
                                             importedItemCount += 1;
                                             transactionAdded = true;

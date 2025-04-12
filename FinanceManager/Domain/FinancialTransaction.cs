@@ -12,6 +12,8 @@ namespace FinanceManager.Domain
 
         public string FinancialInstitution { get; set; }
 
+        public string FinancialInstitutionType { get; set; }
+
         public long AccountNumber { get; set; }
 
         public string TransactionType { get; set; }
@@ -25,6 +27,8 @@ namespace FinanceManager.Domain
         public bool IsValidated { get; set; }
 
         public string TransactionId { get; set; }
+
+        public bool IsNew { get; set; }
 
         [JsonIgnore]
         public string Message { get; set; }
