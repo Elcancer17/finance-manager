@@ -66,29 +66,21 @@
 		</ListBox>
 
 		<Grid RowDefinitions="*, auto" Grid.Row="1" Grid.Column="1">
-			<DataGrid x:Name="dgFinancialData"
-					  ItemsSource="{Binding Finance.FinancialData}"
-					  GridLinesVisibility="All"
-					  VerticalAlignment="Stretch"
-					  Background="Transparent"
-					  Grid.Row="0">
-				<DataGrid.Columns>
-					<DataGridTextColumn Header="Compte" Binding="{Binding Path=Transaction.FinancialInstitution}" IsReadOnly="False"/>
-					<DataGridTextColumn Header="Compte" Binding="{Binding Path=Transaction.AccountNumber}" IsReadOnly="False"/>
-					<DataGridTextColumn Header="Date" Binding="{Binding Path=Transaction.TimeStamp, StringFormat='yyyy-MM-dd'}" IsReadOnly="True"/>
-					<DataGridTextColumn Header="Montant" Binding="{Binding Path=Transaction.Value, StringFormat='c'}" IsReadOnly="True"/>
-					<DataGridTextColumn Header="Description" Binding="{Binding Path=Transaction.Description}" IsReadOnly="True"/>
-					<DataGridCheckBoxColumn Header="Validé" Binding="{Binding Path=Transaction.IsValidated}" IsReadOnly="False"/>
-					<DataGridTextColumn Header="Total" Binding="{Binding Path=Total}" IsReadOnly="True"/>
-					<DataGridTemplateColumn>
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<Button Content="Edit" Tag="{Binding}" Click="btnEdit_Click"/>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-				</DataGrid.Columns>
-			</DataGrid>
+			<TreeDataGrid x:Name="dgFinancialData"
+						  VerticalAlignment="Stretch"
+						  Background="Transparent"
+						  Grid.Row="0">
+				<TreeDataGrid.Styles>
+					<Style Selector=":is(TreeDataGridColumnHeader)">
+						<Setter Property="Padding" Value="12,9,6,9" />
+						<Setter Property="Foreground" Value="{DynamicResource SystemControlBackgroundBaseMediumBrush}" />
+					</Style>
+					<Style Selector=":is(TreeDataGridCell)">
+						<Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundListLowBrush}" />
+						<Setter Property="BorderThickness" Value="0,0,1,1" />
+					</Style>
+				</TreeDataGrid.Styles>
+			</TreeDataGrid>
 			<Grid ColumnDefinitions="auto, auto, *, auto" Grid.Row="1">
 				<Button x:Name="btnAdd"
 						Content="Ajouter"
