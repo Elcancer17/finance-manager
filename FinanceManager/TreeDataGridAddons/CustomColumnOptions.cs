@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FinanceManager.TreeDataGrid
+namespace FinanceManager.TreeDataGridAddons
 {
     public class CustomColumnOptions<T> : ColumnOptions<T>
     {

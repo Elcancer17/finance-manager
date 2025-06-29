@@ -6,7 +6,7 @@ using Avalonia;
 using Avalonia.Layout;
 using FinanceManager.Utils;
 
-namespace FinanceManager.TreeDataGrid
+namespace FinanceManager.TreeDataGridAddons
 {
     public class CustomTextColumn<TModel, TValue> : CustomColumn<TModel, TValue> where TModel : class
     {

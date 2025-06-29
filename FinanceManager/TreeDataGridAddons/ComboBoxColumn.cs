@@ -13,7 +13,7 @@ using System.Reflection;
 using FinanceManager.Utils.Converters;
 using FinanceManager.Utils;
 
-namespace FinanceManager.TreeDataGrid
+namespace FinanceManager.TreeDataGridAddons
 {
     public class ComboBoxColumn<TModel, TValue> : CustomColumn<TModel, TValue> where TModel : class
     {

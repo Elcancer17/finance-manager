@@ -13,7 +13,7 @@ using FinanceManager.Import;
 using System.Collections.Specialized;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
-using FinanceManager.TreeDataGrid;
+using FinanceManager.TreeDataGridAddons;
 using System.Reactive.Linq;
 using Avalonia.Data;
 

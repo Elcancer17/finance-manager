@@ -6,7 +6,7 @@ using Avalonia.Data;
 using Avalonia.Interactivity;
 using FinanceManager.Domain;
 using FinanceManager.Import;
-using FinanceManager.TreeDataGrid;
+using FinanceManager.TreeDataGridAddons;
 using FinanceManager.Utils;
 using FinanceManager.ViewModels;
 using System;

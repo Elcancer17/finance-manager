@@ -9,7 +9,7 @@ using Avalonia;
 using Avalonia.Data.Converters;
 using FinanceManager.Utils;
 
-namespace FinanceManager.TreeDataGrid
+namespace FinanceManager.TreeDataGridAddons
 {
 
     public abstract class CustomColumn<TModel, TValue> where TModel : class
