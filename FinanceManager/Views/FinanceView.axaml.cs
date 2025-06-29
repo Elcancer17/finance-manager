@@ -9,9 +9,12 @@ using FinanceManager.Import;
 using FinanceManager.TreeDataGridAddons;
 using FinanceManager.Utils;
 using FinanceManager.ViewModels;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace FinanceManager.Views;
 
@@ -148,44 +151,55 @@ public partial class FinanceView : UserControl
     }
 
 
-    private void btnAdd_Click(object sender, RoutedEventArgs e)
+    private async void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-    
+        FinancialTransaction newTransaction = new();
+        Window ownerWindow = (Window)TopLevel.GetTopLevel(this);
+
+        FinancialTransactionWindow window = new("Ajouter Transaction", newTransaction);
+        bool savedNewTransaction = await window.ShowDialog<bool>(ownerWindow);
+        if (savedNewTransaction)
+        {
+            //do add;
+        }
     }
 
-    private void btnDelete_Click(object sender, RoutedEventArgs e)
+    private async void btnEdit_Click(object sender, RoutedEventArgs e)
     {
+        IReadOnlyList<FinancialTransactionDisplay> selection = dgFinancialData.GetSelection<FinancialTransactionDisplay>();
+        Window ownerWindow = (Window)TopLevel.GetTopLevel(this);
 
+        for (int i = 0; i < selection.Count; i++)
+        {
+            FinancialTransaction transactionCopy = new();
+            selection[i].Transaction.CopyTo(transactionCopy);
+
+            FinancialTransactionWindow window = new("Modifier Transaction", transactionCopy);
+            bool savedEdit = await window.ShowDialog<bool>(ownerWindow);
+            if(savedEdit)
+            {
+                //copy edited transaction
+                //example transactionCopy.CopyTo(selection[i].Transaction);
+            }
+        }
+    }
+
+    private async void btnDelete_Click(object sender, RoutedEventArgs e)
+    {
+        IReadOnlyList<FinancialTransactionDisplay> selection = dgFinancialData.GetSelection<FinancialTransactionDisplay>();
+        var messageBox = MessageBoxManager.GetMessageBoxStandard("Confirmation",
+            $"Es-tu sure de vouloir supprimer {selection.Count} transactions?",
+            ButtonEnum.YesNo,
+            Icon.Warning);
+        Window ownerWindow = (Window)TopLevel.GetTopLevel(this);
+        if(await messageBox.ShowWindowDialogAsync(ownerWindow) == ButtonResult.Yes)
+        {
+            //do delete
+        }
     }
 
     private void btnSave_Click(object sender, RoutedEventArgs e)
     {
 
-    }
-
-    private void btnEdit_Click(object sender, RoutedEventArgs e)
-    {
-        if(sender is Button button && button.Tag is FinancialTransactionDisplay editedElement)
-        {
-
-        }
-    }
-    private void btnPopup_Click(object sender, RoutedEventArgs e)
-    {
-        //if (sender is Button button && button.Tag is FinancialTransactionDisplay editedElement)
-        //{
-
-        //}
-    }
-    private void OnPopupButton_Click(object sender, RoutedEventArgs e)
-    {
-        //if (popup.IsOpen)
-        //{
-        //    popup.IsOpen = false;
-        //}
-        //else
-        //{
-        //    popup.IsOpen = true;
-        //}
     }
 }

@@ -80,78 +80,21 @@
 						<Setter Property="BorderThickness" Value="0,0,1,1" />
 					</Style>
 				</TreeDataGrid.Styles>
+				<TreeDataGrid.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Ajouter" Click="btnAdd_Click"/>
+						<MenuItem Header="Modifier [S]" Click="btnEdit_Click"/>
+						<MenuItem Header="Supprimer [S]" Click="btnDelete_Click"/>
+					</ContextMenu>
+				</TreeDataGrid.ContextMenu>
 			</TreeDataGrid>
-			<Grid ColumnDefinitions="auto, auto, *, auto" Grid.Row="1">
-				<Button x:Name="btnAdd"
-						Content="Ajouter"
-						Margin="5"
-						Padding="20,5,20,5"
-						Grid.Column="0"
-						Click="btnAdd_Click" />
-				<Button x:Name="btnDelete"
-						Content="Supprimer"
-						Padding="20,5,20,5"
-						Grid.Column="1"
-						Click="btnDelete_Click" />
+			<Grid ColumnDefinitions="*, auto" Grid.Row="1">
 				<Button x:Name="btnSave"
 						Content="Sauvegarder"
 						Padding="20,5,20,5"
-						Grid.Column="3"
+						Grid.Column="1"
 						Click="btnSave_Click" />
-				<ToggleButton
-						x:Name="OpenClosePopupButton"
-						Grid.Column="2"
-						Content="Open/Close Popup"
-						Click="btnPopup_Click" />
-				<!--<Button Content="Show Popup"
-						Name="OpenClosePopupButton"
-						Click="OnPopupButton_Click" />-->
 			</Grid>
-			<Popup x:Name="ThePopup"
-					   Grid.Row="1"
-					   IsOpen="{Binding Path=IsChecked, ElementName=OpenClosePopupButton, Mode=TwoWay}"
-					   PlacementMode="Bottom"
-					   PlacementTarget="{Binding ElementName=OpenClosePopupButton}">
-				<Border BorderThickness="0.75"
-                    BorderBrush="Black"
-                    Padding="6,3"
-                    Background="White">
-					<Grid x:Name="PopupsContent"
-					  Background="Gray"
-					  Width="1000"
-					  Height="200">
-						<TextBlock Text="Popup's Content"
-								   HorizontalAlignment="Center"
-								   VerticalAlignment="Center"/>
-					</Grid>
-				</Border>
-			</Popup>
-			<!--<Window.Styles>-->
-			<!--<Style Selector="CustomPresenter">
-					<Setter Property="Template">
-						<ControlTemplate>
-							<Border BorderThickness="0.75"
-									BorderBrush="Black"
-									Padding="6,3"
-									Background="White">
-								<TextBlock Text="Hello World" />
-							</Border>
-						</ControlTemplate>
-					</Setter>
-				</Style>-->
-			<!--</Window.Styles>-->
-			<StackPanel Orientation="Vertical" VerticalAlignment="Center">
-				<!--<Button Content="Show Popup" Name="popupButton" Click="OnPopupButton_Click" />-->
-				<!--<Popup Name="Popup"
-				WindowManagerAddShadowHint="False"
-				StaysOpen="False"
-				PlacementMode="Bottom"
-				PlacementTarget="{Binding ElementName=popupButton}">
-				-->
-				<!--<CustomPresenter />-->
-				<!--
-			</Popup>-->
-			</StackPanel>
 		</Grid>
 	</Grid>
 </UserControl>

@@ -48,5 +48,21 @@ namespace FinanceManager.Domain
             using (var alg = SHA256.Create())
                 return alg.ComputeHash(Encoding.UTF8.GetBytes(s)).Aggregate(new StringBuilder(), (sb, x) => sb.Append(x.ToString("x2"))).ToString();
         }
+
+        public void CopyTo(FinancialTransaction other)
+        {
+            other.QuickenId                 = this.QuickenId;
+            other.FinancialInstitution      = this.FinancialInstitution;
+            other.FinancialInstitutionType  = this.FinancialInstitutionType;
+            other.AccountNumber             = this.AccountNumber;
+            other.TransactionType           = this.TransactionType;
+            other.Description               = this.Description;
+            other.TimeStamp                 = this.TimeStamp;
+            other.Value                     = this.Value;
+            other.IsValidated               = this.IsValidated;
+            other.TransactionId             = this.TransactionId;
+            other.IsNew                     = this.IsNew;
+            other.Message                   = this.Message;
+        }
     }
 }

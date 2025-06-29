@@ -18,10 +18,13 @@
 	<Grid RowDefinitions="*, 5, auto">
 		<pgc:PropertyGrid x:Name="pgSettings"
 						  DataContext="{Binding Settings}"
-						  ShowTitle="False"
-						  ShowStyle="Tiled"
-						  AllowFilter="False"
-						  AllowQuickFilter="False"
+						  IsHeaderVisible="False"
+						  IsTitleVisible="False"
+						  LayoutStyle="Tree"
+						  IsQuickFilterVisible="False"
+						  PropertyOrderStyle="Builtin"
+						  IsCategoryVisible="False"
+						  CategoryOrderStyle="Builtin"
 						  Grid.Row="0">
 
 		</pgc:PropertyGrid>
